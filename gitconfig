@@ -2,7 +2,7 @@
   name = Drew Inglis
   email = drew@drewinglis.com
 [core]
-  excludesfile = /Users/drew/.gitignore
+  excludesfile = ~/.gitignore
 	editor = vim
 [alias]
   switch = checkout
