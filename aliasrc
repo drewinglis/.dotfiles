@@ -1,0 +1,39 @@
+# aliases for ctags
+alias ctags="`brew --prefix`/bin/ctags"
+alias ct="ctags -R --exclude=log *"
+
+alias edit="${EDITOR}"
+
+# aliases for grep
+alias rg="grep -r"
+alias crg="grep -r --exclude circle.log"
+alias erg="grep -r --exclude-dir _site --exclude js/application.js"
+alias hrg="nrg --exclude-dir front/public"
+alias jrg="rg --exclude-dir _site"
+alias nrg="grep -r --exclude-dir node_modules"
+alias rrg="grep -r --exclude-dir log --exclude-dir tmp --exclude-dir vendor"
+
+alias h2d="~/bin/h2d.sh"
+alias hostedit="sudo vim /etc/hosts"
+alias jsw="jekyll serve -w"
+alias kinit="kinit ${ANDREWID}@ANDREW.CMU.EDU"
+alias l2pdf="~/bin/l2pdf.sh"
+
+# aliases for ls
+alias la="ls -al"
+alias lh="ls -lh"
+alias ll="ls -l"
+alias lah="ls -lah"
+
+alias md5sum="md5 -r"
+alias newhw="~/CMU/templater/new_hw.rb"
+alias newgem="~/bin/new_gemfile.sh"
+alias ssh410="ssh -Y ghc50.ghc.andrew.cmu.edu"
+alias octave="octave -qf"
+alias pw="open ~/stuff.dmg && sleep 10 && open /Volumes/Disk\ Image/pw.rtf"
+
+# aliases for psql
+alias hpsql="psql -d heap"
+
+alias reload="source ~/.zshrc"
+alias sqlite="sqlite3"
