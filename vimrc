@@ -51,3 +51,6 @@ function! TestToplevel() abort
 fireplace#echo_session_eval("(clojure.test/test-var " . var . ")")
         return result
 endfunction
+
+" PostgreSQL specific style bullshit
+:autocmd BufRead,BufNewFile ~/heap/heap/citus/session_analytics/* setlocal ts=4 sw=4 noexpandtab
