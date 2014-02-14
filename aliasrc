@@ -8,7 +8,7 @@ alias edit="${EDITOR}"
 alias rg="grep -r"
 alias crg="grep -r --exclude circle.log"
 alias erg="grep -r --exclude-dir _site --exclude js/application.js"
-alias hrg="nrg --exclude-dir front/public"
+alias hrg="nrg --exclude-dir front/src/js/lib --exclude-dir front/public"
 alias jrg="rg --exclude-dir _site"
 alias nrg="grep -r --exclude-dir node_modules"
 alias rrg="grep -r --exclude-dir log --exclude-dir tmp --exclude-dir vendor"
@@ -35,5 +35,8 @@ alias pw="open ~/stuff.dmg && sleep 10 && open /Volumes/Disk\ Image/pw.rtf"
 # aliases for psql
 alias hpsql="psql -d heap"
 
+alias rcup="rcup -x README.md"
 alias reload="source ~/.zshrc"
 alias sqlite="sqlite3"
+
+[[ -f ~/.aliasrc.local ]] && source ~/.aliasrc.local
