@@ -1,6 +1,6 @@
 [submodule "vim/bundle/mustache"]
-	path = vim/bundle/mustache
-	url = git://github.com/mustache/vim-mustache-handlebars.git
+  path = vim/bundle/mustache
+  url = git://github.com/mustache/vim-mustache-handlebars.git
 [submodule "vim/bundle.inactive/rainbow_parentheses.vim"]
   path = vim/bundle.inactive/rainbow_parentheses.vim
   url = git@github.com:kien/rainbow_parentheses.vim.git
