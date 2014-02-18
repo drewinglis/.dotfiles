@@ -21,6 +21,7 @@ set smartcase                   " ... unless they contain at least one capital l
 " end stolen block
 
 set number
+set splitright                  " open new vertical splits on the right-hand side
 
 " remove all whitespace at the end of lines
 autocmd BufWritePre * :%s/\s\+$//e
