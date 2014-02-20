@@ -23,6 +23,11 @@ set smartcase                   " ... unless they contain at least one capital l
 set number
 set splitright                  " open new vertical splits on the right-hand side
 
+" Use breakindent patch to automatically indent wrapping lines
+" Get it here: https://github.com/drewinglis/vim-breakindent
+set breakindent
+set showbreak=\ \ " comment so that the whitespace works >.>
+
 " remove all whitespace at the end of lines
 autocmd BufWritePre * :%s/\s\+$//e
 
