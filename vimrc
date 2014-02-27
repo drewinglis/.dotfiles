@@ -67,3 +67,6 @@ autocmd BufRead,BufNewFile ~/heap/heap/citus/session_analytics/* setlocal ts=4 s
 
 " Git config specific styles
 autocmd BufRead,BufNewFile .gitmodules setlocal noexpandtab
+
+" Fix to edit crontab files in place
+au BufEnter crontab.* setl backupcopy=yes
