@@ -40,5 +40,6 @@ alias hpsql="psql -d heap"
 alias rcup="rcup -x README.md -x install.sh"
 alias reload="source ~/.zshrc"
 alias sqlite="sqlite3"
+alias v="vim"
 
 [[ -f ~/.aliasrc.local ]] && source ~/.aliasrc.local
