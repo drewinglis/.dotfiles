@@ -36,7 +36,7 @@ alias pw="open ~/stuff.dmg && sleep 10 && open /Volumes/Disk\ Image/pw.rtf"
 # aliases for psql
 alias hpsql="psql -d heap"
 
-alias rcup="rcup -x README.md"
+alias rcup="rcup -x README.md -x install.sh"
 alias reload="source ~/.zshrc"
 alias sqlite="sqlite3"
 
