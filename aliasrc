@@ -16,6 +16,7 @@ alias rrg="grep -r --exclude-dir log --exclude-dir tmp --exclude-dir vendor"
 
 alias h2d="~/bin/h2d.sh"
 alias hostedit="sudo vim /etc/hosts"
+alias i="ssh irc"
 alias jsw="jekyll serve -w"
 alias kinit="kinit ${ANDREWID}@ANDREW.CMU.EDU"
 alias l2pdf="~/bin/l2pdf.sh"
