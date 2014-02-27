@@ -31,6 +31,10 @@ set showbreak=\ \ " comment so that the whitespace works >.>
 " remove all whitespace at the end of lines
 autocmd BufWritePre * :%s/\s\+$//e
 
+" automatically reload files that change on disk
+set autoread
+autocmd BufEnter,BufWinEnter,CursorHold * :checktime
+
 map <Left> <Nop>
 map <Right> <Nop>
 map <Up> <Nop>
