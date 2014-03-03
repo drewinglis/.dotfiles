@@ -1,6 +1,10 @@
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
+
+# Set vi-mode
+bindkey -v
+
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 ZSH_THEME="agnoster"
@@ -32,5 +36,4 @@ source $ZSH/oh-my-zsh.sh
 
 PATH="${PATH}:/usr/local/heroku/bin:/usr/local/share/npm/bin"
 
-# Customize to your needs...
 export PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
