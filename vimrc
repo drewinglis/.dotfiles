@@ -72,3 +72,6 @@ autocmd BufRead,BufNewFile .gitmodules setlocal noexpandtab
 
 " Fix to edit crontab files in place
 au BufEnter crontab.* setl backupcopy=yes
+
+" Highlight lines over 80 characters
+au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
