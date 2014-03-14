@@ -74,4 +74,5 @@ autocmd BufRead,BufNewFile .gitmodules setlocal noexpandtab
 au BufEnter crontab.* setl backupcopy=yes
 
 " Highlight lines over 80 characters
-au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
+highlight OverLength ctermbg=Black
+match OverLength /\%81v.\+/
