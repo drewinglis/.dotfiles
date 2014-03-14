@@ -17,11 +17,11 @@ set backspace=indent,eol,start  " backspace through everything in insert mode
 set hlsearch                    " highlight matches
 set incsearch                   " incremental searching
 set ignorecase                  " searches are case insensitive...
-set smartcase                   " ... unless they contain at least one capital letter
+set smartcase                   " ... unless they contain a capital letter
 " end stolen block
 
-set number
-set splitright                  " open new vertical splits on the right-hand side
+set number                      " show line numbers
+set splitright                  " open new vertical splits to the right
 
 " Use breakindent patch to automatically indent wrapping lines
 " Get it here: https://github.com/drewinglis/vim-breakindent
@@ -35,6 +35,7 @@ autocmd BufWritePre * :%s/\s\+$//e
 set autoread
 autocmd BufEnter,BufWinEnter,CursorHold * :checktime
 
+" remap arrow keys
 map <Left> <Nop>
 map <Right> <Nop>
 map <Up> <Nop>
@@ -63,7 +64,8 @@ fireplace#echo_session_eval("(clojure.test/test-var " . var . ")")
 endfunction
 
 " PostgreSQL specific style
-autocmd BufRead,BufNewFile ~/heap/heap/citus/session_analytics/* setlocal ts=4 sw=4 noexpandtab
+autocmd BufRead,BufNewFile ~/heap/heap/citus/session_analytics/* setlocal
+        \ ts=4 sw=4 noexpandtab
 
 " Git config specific styles
 autocmd BufRead,BufNewFile .gitmodules setlocal noexpandtab
