@@ -38,6 +38,7 @@ alias pw="open ~/stuff.dmg && sleep 10 && open /Volumes/Disk\ Image/pw.rtf"
 alias hpsql="psql -d heap"
 
 alias rcup="rcup -x README.md -x install.sh"
+alias rla="source ~/.aliasrc"
 alias reload="source ~/.zshrc"
 alias sqlite="sqlite3"
 alias v="vim"
