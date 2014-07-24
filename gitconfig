@@ -12,6 +12,7 @@
   st = status
   kill = branch -d
   new = checkout -b
+  up = fetch --all -p
 [color]
   ui = auto
 [color "branch"]
