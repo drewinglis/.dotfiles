@@ -1,11 +1,12 @@
+alias cl='./node_modules/.bin/coffeelint $(find ./* -name "*.coffee" -not -path "./node_modules/*")'
 # aliases for ctags
 alias ctags="`brew --prefix`/bin/ctags"
-alias ct="ctags -R --exclude=log *"
+alias ct="ctags -R --exclude=log --exclude=node_modules *"
 
 alias edit="${EDITOR}"
 
 # aliases for grep
-alias rg="grep -r --exclude=\"*.swp\""
+alias rg="grep -r --exclude=\"*.swp\" --exclude=tags"
 alias crg="rg --exclude circle.log"
 alias erg="rg --exclude-dir _site --exclude js/application.js"
 alias hrg="nrg --exclude-dir front/src/js/lib --exclude-dir front/public \
@@ -40,6 +41,7 @@ alias hpsql="psql -d heap"
 alias rcup="rcup -x README.md -x install.sh"
 alias rla="source ~/.aliasrc"
 alias reload="source ~/.zshrc"
+alias srb="~/bin/ssh-rebuild.sh"
 alias sqlite="sqlite3"
 alias v="vim"
 
