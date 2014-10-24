@@ -41,10 +41,6 @@ alias newhw="~/CMU/templater/new_hw.rb"
 alias newgem="~/bin/new_gemfile.sh"
 alias ssh410="ssh -Y ghc50.ghc.andrew.cmu.edu"
 alias octave="octave -qf"
-alias pw="open ~/stuff.dmg && sleep 10 && open /Volumes/Disk\ Image/pw.rtf"
-
-# aliases for psql
-alias hpsql="psql -d heap"
 
 alias rcup="rcup -x README.md -x install.sh"
 alias rla="source ~/.aliasrc"
