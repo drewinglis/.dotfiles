@@ -1,6 +1,7 @@
 alias cl='./node_modules/.bin/coffeelint $(find ./* -name "*.coffee" -not -path "./node_modules/*")'
+
 # aliases for ctags
-alias ctags="`brew --prefix`/bin/ctags"
+ensure_command brew && alias ctags="`brew --prefix`/bin/ctags"
 alias ct="ctags -R --exclude=log --exclude=node_modules *"
 
 alias edit="${EDITOR}"

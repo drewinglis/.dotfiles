@@ -1,6 +1,10 @@
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
+# This is used to only load certain things on certain systems.
+ensure_command(){
+  which $1 > /dev/null
+}
 
 # Set vi-mode
 bindkey -v
