@@ -32,6 +32,7 @@ alias kinit="kinit ${ANDREWID}@ANDREW.CMU.EDU"
 alias l2pdf="~/bin/l2pdf.sh"
 
 # aliases for ls
+alias ls="ls --color=auto"
 alias la="ls -al"
 alias lh="ls -lh"
 alias ll="ls -l"
