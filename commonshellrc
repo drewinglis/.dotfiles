@@ -13,3 +13,5 @@ source ~/.aliasrc
 add_to_path_if_exists $HOME/.rvm/bin
 add_to_path_if_exists /usr/local/heroku/bin
 add_to_path_if_exists /usr/local/share/npm/bin
+
+eval $( dircolors -b ~/.dircolors )
