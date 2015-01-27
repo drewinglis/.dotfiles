@@ -1,10 +1,8 @@
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
-# This is used to only load certain things on certain systems.
-ensure_command(){
-  which $1 > /dev/null
-}
+# Include bash and zsh common stuff
+source ~/.commonshellrc
 
 # Set vi-mode
 bindkey -v
@@ -12,10 +10,6 @@ bindkey -v
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 ZSH_THEME="agnoster"
-
-source ~/.exportrc
-
-source ~/.aliasrc
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
@@ -37,7 +31,3 @@ source ~/.aliasrc
 plugins=(git rvm)
 
 source $ZSH/oh-my-zsh.sh
-
-PATH="${PATH}:/usr/local/heroku/bin:/usr/local/share/npm/bin"
-
-export PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
