@@ -1,15 +1,12 @@
-[submodule "vim/bundle/mustache"]
-	path = vim/bundle/mustache
-	url = git://github.com/mustache/vim-mustache-handlebars.git
-[submodule "vim/bundle.inactive/rainbow_parentheses.vim"]
-	path = vim/bundle.inactive/rainbow_parentheses.vim
-	url = git@github.com:kien/rainbow_parentheses.vim.git
 [submodule "vim/bundle/html5.vim"]
 	path = vim/bundle/html5.vim
 	url = git@github.com:othree/html5.vim.git
 [submodule "vim/bundle/lightline.vim"]
 	path = vim/bundle/lightline.vim
 	url = git@github.com:itchyny/lightline.vim.git
+[submodule "vim/bundle/mustache"]
+	path = vim/bundle/mustache
+	url = git://github.com/mustache/vim-mustache-handlebars.git
 [submodule "vim/bundle/vim-clojure-static"]
 	path = vim/bundle/vim-clojure-static
 	url = git@github.com:guns/vim-clojure-static.git
@@ -31,3 +28,6 @@
 [submodule "vim/bundle/vim-sensible"]
 	path = vim/bundle/vim-sensible
 	url = git@github.com:tpope/vim-sensible.git
+[submodule "vim/bundle.inactive/rainbow_parentheses.vim"]
+	path = vim/bundle.inactive/rainbow_parentheses.vim
+	url = git@github.com:kien/rainbow_parentheses.vim.git
