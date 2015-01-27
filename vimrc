@@ -28,6 +28,10 @@ set splitright                  " open new vertical splits to the right
 set breakindent
 set showbreak=\ \ " comment so that the whitespace works >.>
 
+" Use the solarized colorscheme
+set background=dark
+colorscheme solarized
+
 " remove all whitespace at the end of lines
 autocmd BufWritePre * :%s/\s\+$//e
 
