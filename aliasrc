@@ -25,6 +25,7 @@ alias gpo="git push origin"
 alias grso="git remote show origin"
 
 alias h2d="~/bin/h2d.sh"
+alias hello="echo hello"
 alias hostedit="sudo vim /etc/hosts"
 alias i="ssh irc"
 alias jsw="jekyll serve -w"
