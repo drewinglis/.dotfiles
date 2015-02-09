@@ -22,6 +22,7 @@ set smartcase                   " ... unless they contain a capital letter
 
 set number                      " show line numbers
 set splitright                  " open new vertical splits to the right
+set splitbelow                  " open new horizontal splits on the bottom
 
 " Use breakindent patch to automatically indent wrapping lines
 " Get it here: https://github.com/drewinglis/vim-breakindent
