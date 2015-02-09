@@ -53,21 +53,6 @@ inoremap  <Right>  <NOP>
 " set .hamlc ft
 au BufRead,BufNewFile *.hamlc set ft=haml
 
-" function to test-var the current toplevel form (vim-fireplace
-" doesn't yet have good built-in clojure.test support)
-function! TestToplevel() abort
-        "Eval the toplevel clojure form (a deftest) and then test-var the
-        "result."
-        normal! ^
-        let line1 = searchpair('(','',')', 'bcrn', g:fireplace#skip)
-        let line2 = searchpair('(','',')', 'rn', g:fireplace#skip)
-        let expr = join(getline(line1, line2), "\n")
-        let var = fireplace#session_eval(expr)
-        let result =
-fireplace#echo_session_eval("(clojure.test/test-var " . var . ")")
-        return result
-endfunction
-
 " PostgreSQL specific style
 autocmd BufRead,BufNewFile ~/heap/heap/citus/session_analytics/* setlocal
         \ ts=4 sw=4 noexpandtab
