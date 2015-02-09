@@ -53,10 +53,6 @@ inoremap  <Right>  <NOP>
 " set .hamlc ft
 au BufRead,BufNewFile *.hamlc set ft=haml
 
-" PostgreSQL specific style
-autocmd BufRead,BufNewFile ~/heap/heap/citus/session_analytics/* setlocal
-        \ ts=4 sw=4 noexpandtab
-
 " Git config specific styles
 autocmd BufRead,BufNewFile .gitmodules setlocal noexpandtab
 
