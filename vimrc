@@ -1,7 +1,12 @@
+set nocompatible
+
+if filereadable($HOME . '/.vimrc')
+  source ~/.vimrc.local
+endif
+
 execute pathogen#infect()
 
 " most of this stolen from: http://mislav.uniqpath.com/2011/12/vim-revisited/
-set nocompatible                " choose no compatibility with legacy vi
 syntax enable
 set encoding=utf-8
 set showcmd                     " display incomplete commands
