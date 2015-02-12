@@ -35,7 +35,7 @@ set splitbelow                  " open new horizontal splits on the bottom
 set breakindent
 set showbreak=\ \ " comment so that the whitespace works >.>
 
-" Use the solarized colorscheme
+" Use the solarized dark colorscheme
 set background=dark
 colorscheme solarized
 
