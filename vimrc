@@ -25,6 +25,7 @@ set ignorecase                  " searches are case insensitive...
 set smartcase                   " ... unless they contain a capital letter
 " end stolen block
 
+let mapleader=" "
 set number                      " show line numbers
 set splitright                  " open new vertical splits to the right
 set splitbelow                  " open new horizontal splits on the bottom
