@@ -57,4 +57,4 @@ autocmd BufEnter crontab.* setl backupcopy=yes
 
 " Highlight lines over 80 characters
 highlight OverLength ctermbg=Black
-autocmd BufRead,BufNewFile * match OverLength /\%81v.\+/
+autocmd BufRead,BufNewFile,BufEnter,BufWinEnter * match OverLength /\%81v.\+/
