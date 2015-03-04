@@ -10,7 +10,8 @@ syntax enable
 filetype plugin indent on       " load file type plugins + indentation
 let mapleader=" "
 
-set autoread                    " Automatically reload file changes from disk
+set autochdir                   " Change working directory to current file
+set autoread                    " Reload file changes from disk
 set background=dark             " Use the dark background color scheme
 set backspace=indent,eol,start  " Backspace through everything in insert mode
 set breakindent                 " Use breakindent (if enabled)
@@ -20,7 +21,7 @@ set hlsearch                    " Highlight matches
 set ignorecase                  " Searches are case insensitive
 set incsearch                   " Incremental searching
 set number                      " Show line numbers
-set showbreak=\ \               " Comment so that the whitespace works >.>
+set showbreak=\ \               " Set the indent for breakindent
 set showcmd                     " Display incomplete commands
 set smartcase                   " Searches case-sensitive if they're mixed-case
 set splitbelow                  " Open new horizontal splits on the bottom
