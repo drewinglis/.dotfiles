@@ -56,7 +56,7 @@ autocmd BufRead,BufNewFile *.hamlc set ft=haml
 autocmd BufRead,BufNewFile .gitmodules setlocal noexpandtab
 
 " Fix to edit crontab files in place
-autocmd BufEnter crontab.* setl backupcopy=yes
+autocmd BufEnter crontab.* setlocal backupcopy=yes
 
 " Highlight lines over 80 characters
 highlight OverLength ctermbg=Black
