@@ -46,6 +46,9 @@ inoremap  <Down>   <NOP>
 inoremap  <Left>   <NOP>
 inoremap  <Right>  <NOP>
 
+" Look for a file to edit in the current directory
+nmap <leader>e :e ./<CR>
+
 " set .hamlc ft
 autocmd BufRead,BufNewFile *.hamlc set ft=haml
 
