@@ -3,7 +3,4 @@ export EDITOR="vim"
 
 export NAME="Drew Inglis"
 
-export PYTHONPATH=/usr/local/lib/python2.7/site-packages
-export NODE_PATH="/usr/local/lib/node_modules"
-
 [[ -f ~/.exportrc.local ]] && source ~/.exportrc.local
