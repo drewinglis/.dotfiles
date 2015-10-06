@@ -49,6 +49,13 @@ inoremap  <Right>  <NOP>
 " Look for a file to edit in the current directory
 nmap <leader>e :e ./<CR>
 
+" Write out the current buffer
+nmap <leader>w :w<CR>
+
+" Cycle through most recently used buffers
+nmap <leader>up :BuffergatorMruCyclePrev<CR>
+nmap <leader>un :BuffergatorMruCycleNext<CR>
+
 " set .hamlc ft
 autocmd BufRead,BufNewFile *.hamlc set ft=haml
 
