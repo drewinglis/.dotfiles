@@ -40,7 +40,13 @@ alias kinit="kinit ${ANDREWID}@ANDREW.CMU.EDU"
 alias l2pdf="~/bin/l2pdf.sh"
 
 # aliases for ls
-alias ls="ls --color=auto"
+# I am so sorry about this if statement.
+if [ -z $(is_darwin) ]
+  then
+    alias ls="ls -G"
+  else
+    alias ls="ls --color=auto"
+fi
 alias la="ls -al"
 alias lh="ls -lh"
 alias ll="ls -l"
