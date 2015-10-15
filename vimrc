@@ -30,6 +30,9 @@ set tabstop=2 shiftwidth=2      " A tab is two spaces
 
 colorscheme solarized           " Use the solarized dark colorscheme
 
+" Close the YCM autocomplete window after entering insert mode again
+let g:ycm_autoclose_preview_window_after_insertion=1
+
 " remove all whitespace at the end of lines
 autocmd BufWritePre * :%s/\s\+$//e
 
