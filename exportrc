@@ -5,4 +5,4 @@ export EDITOR="vim"
 
 export NAME="Drew Inglis"
 
-[[ -f ~/.exportrc.local ]] && source ~/.exportrc.local
+[[ -f ~/local.conf.d/exportrc ]] && source ~/local.conf.d/exportrc

@@ -1,7 +1,7 @@
 set nocompatible
 
-if filereadable($HOME . '/.vimrc.local')
-  source ~/.vimrc.local
+if filereadable($HOME . '/local.conf.d/vimrc')
+  source ~/local.conf.d/vimrc
 endif
 
 execute pathogen#infect()

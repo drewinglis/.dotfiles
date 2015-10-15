@@ -61,4 +61,4 @@ alias tad="tmux attach -d"
 alias sqlite="sqlite3"
 alias v="vim"
 
-[[ -f ~/.aliasrc.local ]] && source ~/.aliasrc.local
+[[ -f ~/local.conf.d/aliasrc ]] && source ~/local.conf.d/aliasrc
