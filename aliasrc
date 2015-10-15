@@ -8,8 +8,9 @@ alias edit="${EDITOR}"
 
 # aliases for grep
 alias grep="grep --color=auto"
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
+alias egrep="egrep --color=auto"
+alias fgrep="fgrep --color=auto"
+alias igrep="grep -i"
 alias rg="grep -r --exclude=\"*.swp\" --exclude=tags"
 alias crg="rg --exclude circle.log"
 alias erg="rg --exclude-dir _site --exclude js/application.js"
