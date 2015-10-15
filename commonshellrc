@@ -1,8 +1,10 @@
-add_to_path_if_exists(){
+# vim: set syn=sh:
+
+add_to_path_if_exists () {
   [[ -s $1 ]] && PATH=${PATH}:${1}
 }
 
-is_darwin(){
+is_darwin () {
   if [ $(uname -s) = "Darwin" ]
     then
       return 0

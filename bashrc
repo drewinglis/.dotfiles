@@ -1,3 +1,5 @@
+# vim: set syn=sh:
+
 # Include bash and zsh common stuff
 source ~/.commonshellrc
 

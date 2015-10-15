@@ -1,3 +1,5 @@
+# vim: set syn=sh:
+
 export DEFAULT_USER="drew"
 export EDITOR="vim"
 

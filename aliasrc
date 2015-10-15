@@ -1,3 +1,5 @@
+# vim: set syn=sh:
+
 alias cl='./node_modules/.bin/coffeelint $(find ./* -name "*.coffee" -not -path "./node_modules/*")'
 
 # aliases for ctags
