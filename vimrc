@@ -56,6 +56,10 @@ nmap <leader>w :w<CR>
 nmap <leader>up :BuffergatorMruCyclePrev<CR>
 nmap <leader>un :BuffergatorMruCycleNext<CR>
 
+" Create new splits
+nmap <leader>sv :vsp<CR>
+nmap <leader>sh :sp<CR>
+
 " set .hamlc ft
 autocmd BufRead,BufNewFile *.hamlc set ft=haml
 
