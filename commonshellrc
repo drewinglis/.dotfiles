@@ -13,6 +13,13 @@ is_darwin () {
   return 1
 }
 
+# make sure we have the whence command
+which whence > /dev/null
+if [ $? -ne 0 ]
+  then
+    alias whence="type 2>/dev/null"
+fi
+
 source ~/.exportrc
 source ~/.aliasrc
 
