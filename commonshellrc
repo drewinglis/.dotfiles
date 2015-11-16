@@ -7,10 +7,10 @@ add_to_path_if_exists () {
 is_darwin () {
   if [ $(uname -s) = "Darwin" ]
     then
-      return 0
+      return 1
   fi
 
-  return 1
+  return 0
 }
 
 # make sure we have the whence command

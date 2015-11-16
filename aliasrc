@@ -42,7 +42,7 @@ alias l2pdf="~/bin/l2pdf.sh"
 
 # aliases for ls
 # I am so sorry about this if statement.
-if [ -z $(is_darwin) ]
+if [ $(is_darwin) ]
   then
     alias ls="ls -G"
   else
