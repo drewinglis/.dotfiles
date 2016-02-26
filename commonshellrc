@@ -28,3 +28,6 @@ add_to_path_if_exists /usr/local/heroku/bin
 add_to_path_if_exists /usr/local/share/npm/bin
 
 whence dircolors >/dev/null && eval $( dircolors -b ~/.dircolors )
+
+# I never want ctrl-s to "hang" my terminal
+stty -ixon
