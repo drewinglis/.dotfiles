@@ -31,3 +31,11 @@
   untracked = white
 [push]
 	default = current
+
+# check hashes
+[transfer]
+  fsckobjects = true
+[fetch]
+  fsckobjects = true
+[receive]
+  fsckobjects = true
