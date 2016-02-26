@@ -69,6 +69,9 @@ autocmd BufRead,BufNewFile *.hamlc set ft=haml
 " Git config specific styles
 autocmd BufRead,BufNewFile .gitmodules setlocal noexpandtab
 
+" Go specific styles. I can tolerate tabs, but not 8-width tabs.
+autocmd FileType go setlocal tabstop=2 shiftwidth=2 noexpandtab
+
 " Fix to edit crontab files in place
 autocmd BufEnter crontab.* setlocal backupcopy=yes
 
