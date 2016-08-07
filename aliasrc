@@ -36,6 +36,7 @@ alias hello="echo hello"
 alias hostedit="sudo vim /etc/hosts"
 alias howlong="expr $(expr 1459468800 - $(date +%s)) \"/\" 86400"
 alias irssi="TERM=screen-256color irssi"
+alias j='~/bin/journal.sh'
 alias jsw="jekyll serve -w"
 alias kinit="kinit ${ANDREWID}@ANDREW.CMU.EDU"
 alias l2pdf="~/bin/l2pdf.sh"
