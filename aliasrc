@@ -67,5 +67,9 @@ alias srb="~/bin/ssh-rebuild.sh"
 alias tad="tmux attach -d"
 alias sqlite="sqlite3"
 alias v="vim"
+alias xin='xclip -i'
+alias xout='xclip -o'
+alias xcopy='xin'
+alias xpaste='xout'
 
 [[ -f ~/local.conf.d/aliasrc ]] && source ~/local.conf.d/aliasrc
