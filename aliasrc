@@ -1,4 +1,5 @@
 # vim: set syn=sh:
+
 alias be="bundle exec"
 
 alias cl='./node_modules/.bin/coffeelint $(find ./* -name "*.coffee" -not -path "./node_modules/*")'
@@ -37,7 +38,6 @@ alias hostedit="sudo vim /etc/hosts"
 alias irssi="TERM=screen-256color irssi"
 alias j='~/bin/journal.sh'
 alias jsw="jekyll serve -w"
-alias kinit="kinit ${ANDREWID}@ANDREW.CMU.EDU"
 alias l2pdf="~/bin/l2pdf.sh"
 
 # aliases for ls
@@ -53,9 +53,7 @@ alias ll="ls -l"
 alias lah="ls -lah"
 
 alias md5sum="md5 -r"
-alias newhw="~/CMU/templater/new_hw.rb"
 alias newgem="~/bin/new_gemfile.sh"
-alias ssh410="ssh -Y ghc50.ghc.andrew.cmu.edu"
 alias octave="octave -qf"
 
 alias rcup="rcup -x README.md -x install.sh"
