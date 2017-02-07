@@ -62,6 +62,7 @@ alias rlt="tmux source-file ~/.tmux.conf"
 alias reload="source ~/.zshrc"
 alias srb="~/bin/ssh-rebuild.sh"
 alias tad="tmux attach -d"
+alias tda='tmux detach-client -a'
 alias sqlite="sqlite3"
 alias v="vim"
 alias xin='xclip -i'
