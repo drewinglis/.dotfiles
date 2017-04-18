@@ -3,6 +3,7 @@
 export DEFAULT_USER="drew"
 export EDITOR="vim"
 
+export LESS='-R' # properly handle colors in less
 export NAME="Drew Inglis"
 
 [[ -f ~/local.conf.d/exportrc ]] && source ~/local.conf.d/exportrc
