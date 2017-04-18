@@ -1,70 +1,67 @@
 # vim: set syn=sh:
 
-alias be="bundle exec"
+alias be='bundle exec'
 
 alias cl='./node_modules/.bin/coffeelint $(find ./* -name "*.coffee" -not -path "./node_modules/*")'
 
 # aliases for ctags
-whence brew >/dev/null && alias ctags="`brew --prefix`/bin/ctags"
-alias ct="ctags -R --exclude=log --exclude=node_modules *"
+whence brew >/dev/null && alias ctags='`brew --prefix`/bin/ctags'
+alias ct='ctags -R --exclude=log --exclude=node_modules *'
 
 alias edit="${EDITOR}"
 
 # aliases for grep
-alias grep="grep --color=auto"
-alias egrep="egrep --color=auto"
-alias fgrep="fgrep --color=auto"
-alias igrep="grep -i"
-alias rg="grep -r --exclude=\"*.swp\" --exclude=tags"
-alias crg="rg --exclude circle.log"
-alias erg="rg --exclude-dir _site --exclude js/application.js"
-alias hrg="nrg --exclude-dir front/src/js/lib --exclude-dir front/public \
-                --exclude-dir front/tracker/ios/build"
-alias jrg="rg --exclude-dir _site"
-alias nrg="rg --exclude-dir node_modules"
-alias rrg="rg --exclude-dir log --exclude-dir tmp --exclude-dir vendor"
+alias grep='grep --color=always'
+alias egrep='egrep --color=always'
+alias fgrep='fgrep --color=always'
+alias igrep='grep -i'
+alias rg='grep -r --exclude="*.swp" --exclude=tags'
+alias erg='rg --exclude-dir _site --exclude js/application.js'
+alias jrg='rg --exclude-dir _site'
+alias nrg='rg --exclude-dir node_modules'
+alias rrg='rg --exclude-dir log --exclude-dir tmp --exclude-dir vendor'
 
 # aliases for git
-alias gbd="git branch -d"
-alias gcaa="git commit -a --amend"
-alias gcb="git checkout -b"
-alias gcob="git checkout -b"
-alias gpo="git push origin"
-alias grso="git remote show origin"
+alias gbd='git branch -d'
+alias gcaa='git commit -a --amend'
+alias gcb='git checkout -b'
+alias gcob='git checkout -b'
+alias gpo='git push origin'
+alias grso='git remote show origin'
 
-alias h2d="~/bin/h2d.sh"
-alias hello="echo hello"
-alias hostedit="sudo vim /etc/hosts"
-alias irssi="TERM=screen-256color irssi"
+alias h2d='~/bin/h2d.sh'
+alias hello='echo hello'
+alias hostedit='sudo vim /etc/hosts'
+alias irssi='TERM=screen-256color irssi'
 alias j='~/bin/journal.sh'
-alias jsw="jekyll serve -w"
-alias l2pdf="~/bin/l2pdf.sh"
+alias jsw='jekyll serve -w'
+alias l2pdf='~/bin/l2pdf.sh'
 
 # aliases for ls
 # I am so sorry about this if statement.
 if [[ $(is_darwin) ]]; then
-  alias ls="ls -G"
+  alias ls='ls -G'
 else
-  alias ls="ls --color=auto"
+  alias ls='ls --color=auto'
 fi
-alias la="ls -al"
-alias lh="ls -lh"
-alias ll="ls -l"
-alias lah="ls -lah"
+alias la='ls -al'
+alias lh='ls -lh'
+alias ll='ls -l'
+alias lah='ls -lah'
 
-alias md5sum="md5 -r"
-alias newgem="~/bin/new_gemfile.sh"
-alias octave="octave -qf"
+alias md5sum='md5 -r'
+alias newgem='~/bin/new_gemfile.sh'
+alias octave='octave -qf'
 
-alias rcup="rcup -x README.md -x install.sh"
-alias rla="source ~/.aliasrc"
-alias rlt="tmux source-file ~/.tmux.conf"
-alias reload="source ~/.zshrc"
-alias srb="~/bin/ssh-rebuild.sh"
-alias tad="tmux attach -d"
+alias rcup='rcup -x README.md -x install.sh'
+alias rla='source ~/.aliasrc'
+alias rlt='tmux source-file ~/.tmux.conf'
+alias reload='source ~/.zshrc'
+alias srb='~/bin/ssh-rebuild.sh'
+alias tad='tmux attach -d'
 alias tda='tmux detach-client -a'
-alias sqlite="sqlite3"
-alias v="vim"
+alias sqlite='sqlite3'
+alias v='vim'
 alias xin='xclip -i'
 alias xout='xclip -o'
 alias xcopy='xin'
