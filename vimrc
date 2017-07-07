@@ -82,7 +82,6 @@ augroup generic_autocmds
   autocmd BufEnter crontab.* setlocal backupcopy=yes
 
   " Highlight lines that are too long.
-  let m=''
   function OverLength(m)
     if a:m != ''
       call matchdelete(a:m)
@@ -90,5 +89,7 @@ augroup generic_autocmds
     let pattern='\%' . (&textwidth + 1) . 'v.\+'
     return matchadd('OverLength', pattern, 100)
   endfunction
-  autocmd FileType * let m=OverLength(m)
+  let w:m=''
+  autocmd WinNew * let w:m=''
+  autocmd FileType * let w:m=OverLength(w:m)
 augroup END
