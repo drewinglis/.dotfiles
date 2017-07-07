@@ -53,7 +53,6 @@ alias md5sum='md5 -r'
 alias newgem='~/bin/new_gemfile.sh'
 alias octave='octave -qf'
 
-alias rcup='rcup -x README.md -x install.sh'
 alias rla='source ~/.aliasrc'
 alias rlt='tmux source-file ~/.tmux.conf'
 alias reload='source ~/.zshrc'
