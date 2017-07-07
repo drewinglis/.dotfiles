@@ -30,14 +30,12 @@ set tabstop=2 shiftwidth=2      " A tab is two spaces
 
 colorscheme solarized           " Use the solarized dark colorscheme
 
+" Highlight long lines with a 'black' background.
+highlight ColorColumn ctermbg=Black
+highlight OverLength ctermbg=Black
+
 " Close the YCM autocomplete window after entering insert mode again
 let g:ycm_autoclose_preview_window_after_insertion=1
-
-" remove all whitespace at the end of lines
-autocmd BufWritePre * :%s/\s\+$//e
-
-" automatically reload files that change on disk
-autocmd BufEnter,BufWinEnter,CursorHold * :checktime
 
 " remap arrow keys
 map <Left> <Nop>
@@ -63,18 +61,34 @@ nmap <leader>un :BuffergatorMruCycleNext<CR>
 nmap <leader>sv :vsp<CR>
 nmap <leader>sh :sp<CR>
 
-" set .hamlc ft
-autocmd BufRead,BufNewFile *.hamlc set ft=haml
+augroup generic_autocmds
+  autocmd!
+  " remove all whitespace at the end of lines
+  autocmd BufWritePre * :%s/\s\+$//e
 
-" Git config specific styles
-autocmd BufRead,BufNewFile .gitmodules setlocal noexpandtab
+  " automatically reload files that change on disk
+  autocmd BufEnter,BufWinEnter,CursorHold * :checktime
 
-" Go specific styles. I can tolerate tabs, but not 8-width tabs.
-autocmd FileType go setlocal tabstop=2 shiftwidth=2 noexpandtab
+  " set .hamlc ft
+  autocmd BufRead,BufNewFile *.hamlc set ft=haml
 
-" Fix to edit crontab files in place
-autocmd BufEnter crontab.* setlocal backupcopy=yes
+  " Git config specific styles
+  autocmd BufRead,BufNewFile .gitmodules setlocal noexpandtab
 
-" Highlight lines over 80 characters
-highlight OverLength ctermbg=Black
-autocmd BufRead,BufNewFile,BufEnter,BufWinEnter * match OverLength /\%81v.\+/
+  " Go specific styles. I can tolerate tabs, but not 8-width tabs.
+  autocmd FileType go setlocal tabstop=2 shiftwidth=2 noexpandtab
+
+  " Fix to edit crontab files in place
+  autocmd BufEnter crontab.* setlocal backupcopy=yes
+
+  " Highlight lines that are too long.
+  let m=''
+  function OverLength(m)
+    if a:m != ''
+      call matchdelete(a:m)
+    endif
+    let pattern='\%' . (&textwidth + 1) . 'v.\+'
+    return matchadd('OverLength', pattern, 100)
+  endfunction
+  autocmd FileType * let m=OverLength(m)
+augroup END
