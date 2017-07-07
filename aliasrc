@@ -55,6 +55,8 @@ alias octave='octave -qf'
 
 alias rla='source ~/.aliasrc'
 alias rlt='tmux source-file ~/.tmux.conf'
+alias rlx='DISPLAY=:0 xmodmap ~/.Xmodmap'
+alias RLX=rlx
 alias srb='~/bin/ssh-rebuild.sh'
 alias tad='tmux attach -d'
 alias tda='tmux detach-client -a'
