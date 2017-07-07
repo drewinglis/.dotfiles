@@ -16,7 +16,7 @@ add_to_path_if_exists $HOME/.rvm/bin
 add_to_path_if_exists /usr/local/heroku/bin
 add_to_path_if_exists /usr/local/share/npm/bin
 
-whence dircolors >/dev/null 2>&1 && eval $( dircolors -b ~/.dircolors )
+command -v dircolors >/dev/null 2>&1 && eval $( dircolors -b ~/.dircolors )
 
 # I never want ctrl-s to "hang" my terminal
 stty -ixon
