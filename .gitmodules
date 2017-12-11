@@ -28,6 +28,9 @@
 [submodule "vim/bundle/vim-less"]
 	path = vim/bundle/vim-less
 	url = git@github.com:groenewege/vim-less.git
+[submodule "vim/bundle/vim-scriptease"]
+	path = vim/bundle/vim-scriptease
+	url = git@github.com:tpope/vim-scriptease.git
 [submodule "vim/bundle/vim-sensible"]
 	path = vim/bundle/vim-sensible
 	url = git@github.com:tpope/vim-sensible.git
@@ -40,3 +43,9 @@
 [submodule "vim/bundle/vim-buffergator"]
 	path = vim/bundle/vim-buffergator
 	url = git@github.com:jeetsukumaran/vim-buffergator.git
+[submodule "vim/bundle/vim-lsp"]
+	path = vim/bundle/vim-lsp
+	url = git@github.com:prabirshrestha/vim-lsp.git
+[submodule "vim/bundle/async.vim"]
+	path = vim/bundle/async.vim
+	url = git@github.com:prabirshrestha/async.vim.git
