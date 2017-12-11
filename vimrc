@@ -90,10 +90,13 @@ augroup generic_autocmds
     if a:m != ''
       call matchdelete(a:m)
     endif
-    let pattern='\%' . (&textwidth + 1) . 'v.\+'
-    return matchadd('OverLength', pattern, 100)
+    if &textwidth > 0
+      let pattern='\%' . (&textwidth + 1) . 'v.\+'
+      return matchadd('OverLength', pattern, 100)
+    endif
+    return ''
   endfunction
   let w:m=''
   autocmd WinNew * let w:m=''
-  autocmd FileType * let w:m=OverLength(w:m)
+  autocmd FileType,BufEnter * let w:m=OverLength(w:m)
 augroup END
