@@ -73,6 +73,9 @@ augroup generic_autocmds
   " set .hamlc ft
   autocmd BufRead,BufNewFile *.hamlc set ft=haml
 
+  " set .proto.jinja ft
+  autocmd BufRead,BufNewFile *.proto.jinja set ft=proto
+
   " Git config specific styles
   autocmd BufRead,BufNewFile .gitmodules setlocal noexpandtab
 
