@@ -6,14 +6,14 @@ readonly YELLOW_ESCAPE='\e[0;33m'
 readonly BLUE_ESCAPE='\e[0;34m'
 readonly ESCAPE_END='\e[m'
 
-parse_git_branch() {
-  local color=${GREEN_ESCAPE}
-  if [[ `git status --porcelain 2>/dev/null` ]]; then
-    color=${YELLOW_ESCAPE}
-  fi
+function parse_git_branch () {
   local -r BRANCH=$(git branch 2>/dev/null | \
     sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
   if [[ ${BRANCH} != '' ]]; then
+    local color=${GREEN_ESCAPE}
+    if [[ `git status --porcelain 2>/dev/null` ]]; then
+      color=${YELLOW_ESCAPE}
+    fi
     echo -e " [${color}${BRANCH}${ESCAPE_END}]"
   fi
 }
