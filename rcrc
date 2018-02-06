@@ -1,1 +1,2 @@
 EXCLUDES="install.sh README.md"
+SYMLINK_DIRS="vim"
