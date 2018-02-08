@@ -1,2 +1,3 @@
 EXCLUDES="install.sh README.md"
-SYMLINK_DIRS="vim"
+SYMLINK_DIRS="bin vim"
+UNDOTTED="bin"
