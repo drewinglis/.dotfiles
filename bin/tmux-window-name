@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Use local override if applicable.
+readonly LOCAL_OVERRIDE_SCRIPT="$HOME/local.conf.d/bin/tmux-window-name"
+local_override=''
+
+[[ -f ${LOCAL_OVERRIDE_SCRIPT} ]] && local_override=$(${LOCAL_OVERRIDE_SCRIPT} ${1} ${2})
+
+if [[ ${local_override} != '' ]]; then
+  echo ${local_override}
+  exit 0
+fi
+
+# Lightly modified from http://aaroncrane.co.uk/2009/03/git_branch_prompt/
+if [[ `uname` == 'Darwin' ]]; then
+  readonly READLINK='greadlink -e'
+else
+  readonly READLINK='readlink -e'
+fi
+
+find_git_repo() {
+  local dir=${1}
+  until [ "${dir}" -ef / ]; do
+    if [ -f "${dir}/.git/HEAD" ]; then
+      echo "`${READLINK} ${dir}`/"
+      return
+    fi
+    dir="${dir}/.."
+  done
+  return
+}
+
+find_git_branch() {
+  head=$(< "$1.git/HEAD")
+  if [[ ${head} == ref:\ refs/heads/* ]]; then
+    echo "${head#*/*/}"
+  elif [[ ${head} != '' ]]; then
+    echo '(detached)'
+  else
+    echo '(unknown)'
+  fi
+}
+
+readonly GIT_DIR=`find_git_repo ${1}`
+
+if [[ ${GIT_DIR} != '' ]]; then
+  readonly GIT_BRANCH=`find_git_branch ${GIT_DIR}`
+
+  echo "$(basename ${GIT_DIR} | sed -e 's/^[^a-zA-Z0-9]\+//'):${GIT_BRANCH}"
+  exit 0
+fi
+
+echo $2
