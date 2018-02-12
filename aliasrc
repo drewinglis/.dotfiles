@@ -27,13 +27,10 @@ alias gcob='git checkout -b'
 alias gpo='git push origin'
 alias grso='git remote show origin'
 
-alias h2d='~/bin/h2d.sh'
 alias hello='echo hello'
 alias hostedit='sudo vim /etc/hosts'
 alias irssi='TERM=screen-256color irssi'
-alias j='~/bin/journal.sh'
 alias jsw='jekyll serve -w'
-alias l2pdf='~/bin/l2pdf.sh'
 
 # aliases for ls
 # I am so sorry about this if statement.
@@ -48,14 +45,12 @@ alias ll='ls -l'
 alias lah='ls -lah'
 
 alias md5sum='md5 -r'
-alias newgem='~/bin/new_gemfile.sh'
 alias octave='octave -qf'
 
 alias rla='source ~/.aliasrc'
 alias rlt='tmux source-file ~/.tmux.conf'
 alias rlx='DISPLAY=:0 xmodmap ~/.Xmodmap'
 alias RLX=rlx
-alias srb='~/bin/ssh-rebuild.sh'
 alias tad='tmux attach -d'
 alias tda='tmux detach-client -a'
 alias sqlite='sqlite3'
