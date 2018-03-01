@@ -3,16 +3,17 @@
   email = drew@drewinglis.com
 [core]
   excludesfile = ~/.gitignore
-	editor = vim
-	pager = less -r -F -X
+  editor = vim
+  pager = less -R -F -X
 [alias]
-  switch = checkout
+  ci = commit
   co = checkout
   br = branch
-  ci = commit
-  st = status
   kill = branch -d
   new = checkout -b
+  st = status
+  switch = checkout
+  sync = fetch --all -p
   up = fetch --all -p
 [color]
   ui = auto
@@ -30,7 +31,7 @@
   changed = yellow
   untracked = white
 [push]
-	default = current
+  default = current
 
 # check hashes
 [transfer]
