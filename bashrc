@@ -18,6 +18,7 @@ function display_git_branch() {
     echo -e " [${color}${BRANCH}${ESCAPE_END}]"
   fi
 }
+export -f display_git_branch
 
 function prompt_command() {
   # this is a fucking stupid hack

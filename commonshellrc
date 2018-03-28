@@ -33,9 +33,10 @@ if ! shopt -oq posix; then
   fi
 fi
 
-add_to_path_if_exists () {
+function add_to_path_if_exists () {
   [[ -s $1 ]] && PATH=${PATH}:${1}
 }
+export -f add_to_path_if_exists
 
 alias is_darwin='test $(uname -s) == "Darwin"'
 
