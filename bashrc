@@ -8,7 +8,7 @@ readonly ESCAPE_END='\001\e[m\002'
 
 alias parse_git_branch="git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'"
 
-display_git_branch() {
+function display_git_branch() {
   local -r BRANCH=$(parse_git_branch)
   if [[ ${BRANCH} != '' ]]; then
     local color=${GREEN_ESCAPE}
