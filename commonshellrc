@@ -45,10 +45,11 @@ command -v whence >/dev/null 2>&1 || alias whence="command -v"
 source ~/.exportrc
 source ~/.aliasrc
 
-add_to_path_if_exists $HOME/bin
-add_to_path_if_exists $HOME/.rvm/bin
-add_to_path_if_exists /usr/local/heroku/bin
-add_to_path_if_exists /usr/local/share/npm/bin
+add_to_path_if_exists "${HOME}/bin"
+add_to_path_if_exists "${HOME}/.rvm/bin"
+add_to_path_if_exists "${GOPATH}/bin"
+add_to_path_if_exists '/usr/local/heroku/bin'
+add_to_path_if_exists '/usr/local/share/npm/bin'
 
 command -v dircolors >/dev/null 2>&1 && eval $( dircolors -b ~/.dircolors )
 
