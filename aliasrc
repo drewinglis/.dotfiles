@@ -34,7 +34,6 @@ alias irssi='TERM=screen-256color irssi'
 alias jsw='jekyll serve -w'
 
 # aliases for ls
-# I am so sorry about this if statement.
 if [[ $(is_darwin) ]]; then
   alias ls='ls -G'
 else
