@@ -1,3 +1,9 @@
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
 # Include bash and zsh common stuff
 source ~/.commonshellrc
 
@@ -23,7 +29,6 @@ export -f display_git_branch
 function prompt_command() {
   # this is a fucking stupid hack
   if [[ ! -z "$TMUX" ]]; then
-    tmux refresh-client
     tmux refresh-client
   fi
 }
