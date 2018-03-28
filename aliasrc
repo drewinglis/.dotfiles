@@ -24,6 +24,7 @@ alias gbd='git branch -d'
 alias gcaa='git commit -a --amend'
 alias gcb='git checkout -b'
 alias gcob='git checkout -b'
+alias gd='git diff'
 alias gpo='git push origin'
 alias grso='git remote show origin'
 
