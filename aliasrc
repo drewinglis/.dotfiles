@@ -19,12 +19,16 @@ alias jrg='rg --exclude-dir _site'
 alias nrg='rg --exclude-dir node_modules'
 alias rrg='rg --exclude-dir log --exclude-dir tmp --exclude-dir vendor'
 
-# aliases for git. git_alias function adds autocompletion automatically.
+# aliases for git
+# The git_alias function adds tab-completion for the aliased commands
+# automagically.
 function git_alias () {
   alias "$1"
   __git_complete $(echo ${1} | cut -d '=' -f 1) _git_$(echo ${1} | cut -d ' ' -f 2)
 }
 git_alias gbd='git branch -d'
+
+# Pretend this is short for "git branch rebase -d".
 function gbrbd () {
   git checkout $@ && git rebase master && git checkout master && git branch -d $@
 }
@@ -34,6 +38,9 @@ git_alias gcb='git checkout -b'
 git_alias gcob='git checkout -b'
 git_alias gd='git diff'
 git_alias gpo='git push origin'
+# Purposefully not called with git_alias because you shouldn't call this with
+# any arguments and presumably alias is faster than git_alias in that case and
+# my shell load time is already too high.
 alias grso='git remote show origin'
 
 alias hello='echo hello'
