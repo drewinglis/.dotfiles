@@ -25,6 +25,10 @@ function git_alias () {
   __git_complete $(echo ${1} | cut -d '=' -f 1) _git_$(echo ${1} | cut -d ' ' -f 2)
 }
 git_alias gbd='git branch -d'
+function gbrbd () {
+  git checkout $@ && git rebase master && git checkout master && git branch -d $@
+}
+__git_complete gbrbd _git_branch
 git_alias gcaa='git commit -a --amend'
 git_alias gcb='git checkout -b'
 git_alias gcob='git checkout -b'
