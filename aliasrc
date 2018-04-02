@@ -20,8 +20,11 @@ alias nrg='rg --exclude-dir node_modules'
 alias rrg='rg --exclude-dir log --exclude-dir tmp --exclude-dir vendor'
 
 # aliases for git
-# The git_alias function adds tab-completion for the aliased commands
-# automagically.
+# The git_alias function condenses:
+#   alias gb='git brach'
+#   __git_complete gb _git_branch
+# into:
+#   git_alias gb='git branch'
 function git_alias () {
   alias "$1"
   __git_complete $(echo ${1} | cut -d '=' -f 1) _git_$(echo ${1} | cut -d ' ' -f 2)
