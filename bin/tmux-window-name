@@ -1,10 +1,12 @@
 #!/bin/bash
 
+readonly TARGET_PWD="${1}"
+
 # Use local override if applicable.
 readonly LOCAL_OVERRIDE_SCRIPT="$HOME/local.conf.d/bin/tmux-window-name"
 local_override=''
 
-[[ -f ${LOCAL_OVERRIDE_SCRIPT} ]] && local_override=$(${LOCAL_OVERRIDE_SCRIPT} ${1} ${2})
+[[ -f ${LOCAL_OVERRIDE_SCRIPT} ]] && local_override=$(${LOCAL_OVERRIDE_SCRIPT} ${TARGET_PWD} ${2})
 
 if [[ ${local_override} != '' ]]; then
   echo ${local_override}
@@ -31,7 +33,7 @@ find_git_repo() {
 }
 
 find_git_branch() {
-  head=$(< "$1.git/HEAD")
+  head=$(< "${1}.git/HEAD")
   if [[ ${head} == ref:\ refs/heads/* ]]; then
     echo "${head#*/*/}"
   elif [[ ${head} != '' ]]; then
@@ -41,7 +43,7 @@ find_git_branch() {
   fi
 }
 
-readonly GIT_DIR=`find_git_repo ${1}`
+readonly GIT_DIR=`find_git_repo ${TARGET_PWD}`
 
 if [[ ${GIT_DIR} != '' ]]; then
   readonly GIT_BRANCH=`find_git_branch ${GIT_DIR}`
