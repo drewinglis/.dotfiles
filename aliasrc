@@ -25,12 +25,14 @@ alias rrg='rg --exclude-dir log --exclude-dir tmp --exclude-dir vendor'
 #   __git_complete gb _git_branch
 # into:
 #   git_alias gb='git branch'
+#
+# make sure __git_complete exists
+type -t __git_complete >/dev/null || source /usr/share/bash-completion/completions/git
 function git_alias () {
   alias "$1"
   __git_complete $(echo ${1} | cut -d '=' -f 1) _git_$(echo ${1} | cut -d ' ' -f 2)
 }
 git_alias gbd='git branch -d'
-
 # Pretend this is short for "git branch rebase -d".
 function gbrbd () {
   git checkout $@ && git rebase master && git checkout master && git branch -d $@
