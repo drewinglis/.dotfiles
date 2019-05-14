@@ -27,7 +27,12 @@ alias rrg='rg --exclude-dir log --exclude-dir tmp --exclude-dir vendor'
 #   git_alias gb='git branch'
 #
 # make sure __git_complete exists
-type -t __git_complete >/dev/null || source /usr/share/bash-completion/completions/git
+type -t __git_complete >/dev/null || if [[ is_darwin ]]; then
+  source /usr/local/etc/bash_completion.d/git-completion.bash
+else
+  source /usr/share/bash-completion/completions/git
+fi
+
 function git_alias () {
   alias "$1"
   __git_complete $(echo ${1} | cut -d '=' -f 1) _git_$(echo ${1} | cut -d ' ' -f 2)
@@ -54,7 +59,7 @@ alias irssi='TERM=screen-256color irssi'
 alias jsw='jekyll serve -w'
 
 # aliases for ls
-if [[ $(is_darwin) ]]; then
+if [[ is_darwin ]]; then
   alias ls='ls -G'
 else
   alias ls='ls --color=auto'
