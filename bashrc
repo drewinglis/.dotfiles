@@ -21,7 +21,7 @@ function display_git_branch() {
     if [[ `git status --porcelain 2>/dev/null` ]]; then
       color=${YELLOW_ESCAPE}
     fi
-    echo -e " [${color}${BRANCH}${ESCAPE_END}]"
+    printf " [${color}${BRANCH}${ESCAPE_END}]"
   fi
 }
 export -f display_git_branch
