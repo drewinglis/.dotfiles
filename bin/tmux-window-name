@@ -13,6 +13,11 @@ if [[ ${local_override} != '' ]]; then
   exit 0
 fi
 
+if [[ ! -d "${TARGET_PWD}" ]]; then
+  echo "${TARGET_PWD}"
+  exit 0
+fi
+
 # Lightly modified from http://aaroncrane.co.uk/2009/03/git_branch_prompt/
 if [[ `uname` == 'Darwin' ]]; then
   # this needs `brew install coreutils` or similar to work
