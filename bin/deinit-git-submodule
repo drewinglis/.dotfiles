@@ -1,0 +1,6 @@
+#!/bin/sh
+
+git submodule deinit "${1}"
+git rm "${1}"
+git commit -m "Removed ${1} submodule"
+rm -rf ".git/modules/${1}"
