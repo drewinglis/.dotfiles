@@ -39,7 +39,7 @@ highlight OverLength ctermbg=Black
 " Close the YCM autocomplete window after entering insert mode again
 let g:ycm_autoclose_preview_window_after_insertion=1
 
-" remap arrow keys
+" remove training wheels
 map <Left> <Nop>
 map <Right> <Nop>
 map <Up> <Nop>
@@ -63,7 +63,7 @@ nmap <leader>un :BuffergatorMruCycleNext<CR>
 nmap <leader>sv :vsp<CR>
 nmap <leader>sh :sp<CR>
 
-augroup generic_autocmds
+augroup drewinglis_generic_autocmds
   autocmd!
   " remove all whitespace at the end of lines
   autocmd BufWritePre * :%s/\s\+$//e
