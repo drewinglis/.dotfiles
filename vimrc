@@ -27,6 +27,7 @@ set smartcase                   " Searches case-sensitive if they're mixed-case
 set splitbelow                  " Open new horizontal splits on the bottom
 set splitright                  " Open new vertical splits to the right
 set tabstop=2 shiftwidth=2      " A tab is two spaces
+set tags=.git/tags;             " See git_template/hooks for more details
 set textwidth=80                " I like 80 chars for the default tw value
 
 colorscheme solarized           " Use the solarized dark colorscheme
