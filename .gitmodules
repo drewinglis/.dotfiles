@@ -46,3 +46,6 @@
 [submodule "vim/bundle/vim-classpath"]
 	path = vim/bundle/vim-classpath
 	url = git@github.com:tpope/vim-classpath.git
+[submodule "vim/bundle/vim-clojure-highlight"]
+	path = vim/bundle/vim-clojure-highlight
+	url = git@github.com:guns/vim-clojure-highlight.git
