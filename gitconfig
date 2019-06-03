@@ -38,6 +38,7 @@
   fsckobjects = true
 [fetch]
   fsckobjects = true
+  prune = true
 [receive]
   fsckobjects = true
 [init]
