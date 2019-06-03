@@ -48,7 +48,8 @@ add_to_path_if_exists "${GOPATH}/bin"
 add_to_path_if_exists '/usr/local/heroku/bin'
 add_to_path_if_exists '/usr/local/share/npm/bin'
 
-command -v dircolors >/dev/null 2>&1 && eval $( dircolors -b ~/.dircolors )
+command -v pyenv-virtualenv-init > /dev/null 2>&1 && eval "$( pyenv virtualenv-init - )"
+command -v dircolors >/dev/null 2>&1 && eval "$( dircolors -b ~/.dircolors )"
 
 # I never want ctrl-s to "hang" my terminal
 stty -ixon
