@@ -20,6 +20,7 @@ set expandtab                   " Use spaces, not tabs
 set hlsearch                    " Highlight matches
 set ignorecase                  " Searches are case insensitive
 set incsearch                   " Incremental searching
+set nomodeline                  " Hashtag security
 set number                      " Show line numbers
 set showbreak=\ \               " Set the indent for breakindent
 set showcmd                     " Display incomplete commands
