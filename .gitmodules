@@ -58,3 +58,6 @@
 [submodule "vim/bundle/vim-salve"]
 	path = vim/bundle/vim-salve
 	url = git@github.com:tpope/vim-salve.git
+[submodule "vim/bundle/thrift.vim"]
+	path = vim/bundle/thrift.vim
+	url = git@github.com:solarnz/thrift.vim.git
