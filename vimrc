@@ -64,6 +64,10 @@ nmap <leader>un :BuffergatorMruCycleNext<CR>
 nmap <leader>sv :vsp<CR>
 nmap <leader>sh :sp<CR>
 
+" Hacky go-to relative file commands. Only works for java-like projects.
+nmap <leader>fc :execute "e ".substitute(expand("%:p"), '/test/\(.*\)_test\.\(.*\)', '/src/\1.\2', "")<CR>
+nmap <leader>ft :execute "e ".substitute(expand("%:p"), '/src/\(.*\)\.\(.*\)', '/test/\1_test.\2', "")<CR>
+
 augroup drewinglis_generic_autocmds
   autocmd!
   " remove all whitespace at the end of lines
