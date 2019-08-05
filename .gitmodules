@@ -16,9 +16,6 @@
 [submodule "vim/bundle/vim-buffergator"]
 	path = vim/bundle/vim-buffergator
 	url = git@github.com:jeetsukumaran/vim-buffergator.git
-[submodule "vim/bundle/vim-lsp"]
-	path = vim/bundle/vim-lsp
-	url = git@github.com:prabirshrestha/vim-lsp.git
 [submodule "vim/bundle/YouCompleteMe"]
 	path = vim/bundle/YouCompleteMe
 	url = git@github.com:Valloric/YouCompleteMe.git
