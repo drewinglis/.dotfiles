@@ -43,3 +43,6 @@
 [submodule "vim/bundle/thrift.vim"]
 	path = vim/bundle/thrift.vim
 	url = git@github.com:solarnz/thrift.vim.git
+[submodule "vim/bundle/vim-polygot"]
+	path = vim/bundle/vim-polygot
+	url = git@github.com:sheerun/vim-polyglot.git
