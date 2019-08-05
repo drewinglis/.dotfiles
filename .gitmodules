@@ -49,9 +49,6 @@
 [submodule "vim/bundle/YouCompleteMe"]
 	path = vim/bundle/YouCompleteMe
 	url = git@github.com:Valloric/YouCompleteMe.git
-[submodule "vim/bundle/vim-projectionist"]
-	path = vim/bundle/vim-projectionist
-	url = git@github.com:tpope/vim-projectionist.git
 [submodule "vim/bundle/vim-salve"]
 	path = vim/bundle/vim-salve
 	url = git@github.com:tpope/vim-salve.git
