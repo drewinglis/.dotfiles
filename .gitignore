@@ -1,1 +1,3 @@
-bin/cljfmt
+bin/
+
+lein/repl-history

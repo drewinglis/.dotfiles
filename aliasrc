@@ -6,6 +6,8 @@ alias cl='./node_modules/.bin/coffeelint $(find ./* -name "*.coffee" -not -path 
 whence brew >/dev/null && alias ctags='`brew --prefix`/bin/ctags'
 alias ct='ctags -R --exclude=log --exclude=node_modules *'
 
+alias diff='git diff --no-index'
+
 alias edit="${EDITOR}"
 
 # aliases for grep
@@ -71,6 +73,7 @@ alias lah='ls -lah'
 
 alias md5sum='md5 -r'
 alias octave='octave -qf'
+alias open-pr='open $(git push-url $(git upstream | cut -d "/" -f1) | sed -e "s,git@\\(.*\\):,https://\1/," | sed "s/.git$//")/compare/$(git current-branch)?expand=1'
 
 alias rla='source ~/.aliasrc'
 alias rlt='tmux source-file ~/.tmux.conf'

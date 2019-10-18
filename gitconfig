@@ -1,21 +1,28 @@
 [user]
   name = Drew Inglis
   email = drew@drewinglis.com
+	signingkey = 5F4F4C89E9A1A78309355638C8D57417246F0700
 [core]
   excludesfile = ~/.gitignore
   editor = vim
   pager = less -R -F -X
 [alias]
+  br = branch
   ci = commit
   co = checkout
-  br = branch
+  current-branch = symbolic-ref --short HEAD
+  diff-branch = !git diff "$(git merge-base $(git upstream) head)"
+  edit = !vim $(git diff-branch --name-only)
   kill = branch -d
   new = checkout -b
+  pr = !open-pr
+  pull-url = remote get-url --pull
+  push-url = remote get-url --push
+  sign = !GPU_TTY=$(tty) git tag -s
   st = status
   switch = checkout
   sync = fetch --all -p
   up = fetch --all -p
-  edit = !vim $(git diff --name-only $(git upstream)..)
   upstream = rev-parse --abbrev-ref @{upstream}
 [color]
   ui = auto
@@ -45,3 +52,5 @@
   fsckobjects = true
 [init]
   templatedir = /Users/drew/.git_template
+[gpg]
+	program = gpg
