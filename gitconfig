@@ -48,10 +48,12 @@
   fsckobjects = true
 [fetch]
   fsckobjects = true
-  prune = true
+	prune = true
 [receive]
   fsckobjects = true
 [init]
   templatedir = /Users/drew/.git_template
 [gpg]
 	program = gpg
+[checkout]
+	defaultRemote = origin
