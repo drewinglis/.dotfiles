@@ -10,6 +10,8 @@ alias diff='git diff --no-index'
 
 alias edit="${EDITOR}"
 
+alias gpgtest='export GPG_TTY=$(tty) && echo "test" | gpg --clearsign'
+
 # aliases for grep
 alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
