@@ -75,7 +75,8 @@ alias lah='ls -lah'
 
 alias md5sum='md5 -r'
 alias octave='octave -qf'
-alias open-pr='open $(git push-url $(git upstream | cut -d "/" -f1) | sed -e "s,git@\\(.*\\):,https://\1/," | sed "s/.git$//")/compare/$(git current-branch)?expand=1'
+alias _open-pr='open $(git push-url $(git upstream | cut -d "/" -f1) | sed -e "s,git@\\(.*\\):,https://\1/," | sed "s/.git$//")/compare/$(git current-branch)?expand=1'
+alias open-pr='_open-pr 2>/dev/null || (git branch -u origin/master && _open-pr)'
 
 alias rla='source ~/.aliasrc'
 alias rlt='tmux source-file ~/.tmux.conf'
