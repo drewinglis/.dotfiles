@@ -2,9 +2,9 @@
 
 rm ~/bin/cljstyle
 
-DARWIN_RELEASE=`curl -s https://api.github.com/repos/greglook/cljstyle/releases | jq '.[0].assets[0]'`
+DARWIN_RELEASE=`curl -s https://api.github.com/repos/greglook/cljstyle/releases | jq '.[0].assets[] | select(.name | contains("macos"))'`
 
-DOWNLOAD_URL=`echo ${DARWIN_RELEASE} | jq '.browser_download_url' | sed -e s/\"//g`
+DOWNLOAD_URL=`echo ${DARWIN_RELEASE} | jq -r '.browser_download_url'`
 
 rm -rf /tmp/cljstyle*
 
@@ -12,7 +12,7 @@ echo "Downloading: ${DOWNLOAD_URL}"
 
 wget -q -P /tmp/ `echo ${DOWNLOAD_URL}`
 
-CLJSTYLE_NAME=`echo ${DARWIN_RELEASE} | jq '.name' | sed -e 's/"\(.*\).tar.gz"/\1/'`
+CLJSTYLE_NAME=`echo ${DARWIN_RELEASE} | jq -r '.name' | sed -e 's/\(.*\).tar.gz/\1/'`
 
 tar -zxf /tmp/${CLJSTYLE_NAME}.tar.gz -C ~/bin
 
