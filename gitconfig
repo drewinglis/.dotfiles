@@ -11,6 +11,7 @@
   ci = commit
   co = checkout
   current-branch = symbolic-ref --short HEAD
+  diffbase = merge-base HEAD @{upstream}
   diff-branch = !git diff "$(git merge-base $(git upstream) head)"
   edit = !vim $(git diff-branch --name-only)
   ff = merge --ff-only
