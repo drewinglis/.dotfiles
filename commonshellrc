@@ -29,7 +29,7 @@ if ! shopt -oq posix; then
 fi
 
 function add_to_path_if_exists () {
-  [[ -s $1 ]] && PATH=${PATH}:${1}
+  [[ -s $1 ]] && PATH="${PATH}:${1}"
 }
 export -f add_to_path_if_exists
 
