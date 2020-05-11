@@ -8,13 +8,16 @@
   pager = less -R -F -X
 [alias]
   br = branch
+  branch-dates = for-each-ref --sort=authordate --format '%(authordate:iso) %(refname:short) %(subject)' refs/heads
   ci = commit
   co = checkout
   current-branch = symbolic-ref --short HEAD
+  diff-branch = !git diff "$(git merge-base $(git upstream HEAD) HEAD)"
+  diff-master = !git diff "$(git merge-base $(git upstream ${1:-HEAD}) ${1:-HEAD})"
   diffbase = merge-base HEAD @{upstream}
-  diff-branch = !git diff "$(git merge-base $(git upstream) head)"
   edit = !vim $(git diff-branch --name-only)
   ff = merge --ff-only
+  flat-rebase = !git rebase -i "$(git diffbase)"
   kill = branch -d
   new = checkout -b
   pr = !open-pr
