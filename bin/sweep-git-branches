@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+git fetch &> /dev/null
+git checkout master &> /dev/null
+git merge --ff-only &> /dev/null
+
+for branch in $(git branch | sed 's/^\*//'); do
+  applies_cleanly=no
+  git checkout "${branch}" &> /dev/null
+  git -P rebase origin/master &> /dev/null && applies_cleanly=yes || \
+    git rebase --abort &> /dev/null
+  git checkout master &> /dev/null
+  [[ ${applies_cleanly} == yes ]] && \
+    git branch -d "${branch}" &> /dev/null && \
+    echo "deleted branch ${branch}" || \
+    echo "not deleting branch ${branch}"
+done
