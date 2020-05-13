@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+# This doesn't 100% work because it just uses sed to delete the offending
+# requires, and so if there are characters on the line other then the require
+# statement you will have to clean those up manually.
+
+clj-kondo --lint $@ | grep 'is required but never used' | while read line; do
+  file=$(echo $line | cut -d : -f 1)
+  requires=$(echo $line | cut -d ' ' -f 4)
+  echo $file $requires
+  gsed -i "/$requires/d" $file
+done
