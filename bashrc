@@ -36,4 +36,9 @@ PROMPT_COMMAND=prompt_command
 
 export PS1="${GREEN_ESCAPE}\w${ESCAPE_END}\$(display_git_branch)\n${BLUE_ESCAPE}\A \$${ESCAPE_END} "
 
+switch-java () {
+  export JAVA_HOME=$(/usr/libexec/java_home -v $1)
+  java -version
+}
+
 [[ -f ~/local.conf.d/bashrc ]] && source ~/local.conf.d/bashrc
