@@ -12,13 +12,7 @@ readonly AWS_ASSUME_ROLE_USERNAME="${AWS_ASSUME_ROLE_USERNAME}"
 readonly AWS_USERNAME="${USER}"
 readonly AWS_ASSUME_ROLE_DURATION_SECONDS=43200
 
-if [[ $# -gt 0 ]]; then
-  mfa_code="${1}"
-  shift
-else
-  printf 'Enter MFA code: '
-  read mfa_code
-fi
+mfa_code="$(ykman oath code -s aws)"
 
 aws sts assume-role \
   --role-arn "arn:aws:iam::${AWS_ACCOUNT_ID}:role/${AWS_ASSUME_ROLE_USERNAME}" \
