@@ -22,3 +22,6 @@
 [submodule "vim/bundle/salt-vim"]
 	path = vim/bundle/salt-vim
 	url = git@github.com:saltstack/salt-vim.git
+[submodule "vim/bundle/YouCompleteMe"]
+	path = vim/bundle/YouCompleteMe
+	url = git@github.com:ycm-core/YouCompleteMe.git
