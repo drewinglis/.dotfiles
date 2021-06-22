@@ -1,8 +1,11 @@
 {:user {:aliases {"refresh" ["do" "monolith" "each" ":refresh" "build"
                              ":upstream" ":skip" :project/name ":parallel"
                              "4" "install,"]}
-        :dependencies [[hashp "0.1.1"]]
-        :injections [(require 'hashp.core)]
+        :dependencies [[hashp "0.1.1"]
+                       [pjstadig/humane-test-output "0.10.0"]]
+        :injections [(require 'hashp.core)
+                     (require 'pjstadig.humane-test-output)
+                     (pjstadig.humane-test-output/activate!)]
         ;;:middleware [whidbey.plugin/repl-pprint]
         :plugins [[com.jakemccrary/lein-test-refresh "0.24.1"]
                   [lein-ancient "0.6.15"]
