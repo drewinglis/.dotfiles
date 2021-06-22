@@ -9,8 +9,9 @@
         ;;:middleware [whidbey.plugin/repl-pprint]
         :plugins [[com.jakemccrary/lein-test-refresh "0.24.1"]
                   [lein-ancient "0.6.15"]
-                  [lein-monolith "1.4.0"]
-                  [mvxcvi/whidbey "2.1.1"]]
+                  ;[lein-cprint "1.3.3"]
+                  [lein-monolith "1.7.0"]
+                  [mvxcvi/whidbey "2.2.1"]]
         :test-refresh {:notify-command ["/usr/local/bin/terminal-notifier"
                                         "-group" "lein-test-refresh" "-title"
                                         "lein test-refresh" "-message"]
