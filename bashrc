@@ -34,6 +34,6 @@ function prompt_command() {
 }
 PROMPT_COMMAND=prompt_command
 
-export PS1="${GREEN_ESCAPE}\u@\h\n\w${ESCAPE_END}\$(display_git_branch)\n${BLUE_ESCAPE}\A \$${ESCAPE_END} "
+export PS1="${GREEN_ESCAPE}\w${ESCAPE_END}\$(display_git_branch)\n${BLUE_ESCAPE}\A \$${ESCAPE_END} "
 
 [[ -f ~/local.conf.d/bashrc ]] && source ~/local.conf.d/bashrc
