@@ -1,2 +1,3 @@
 bin/zkcli
 lein/repl-history
+lein/credentials.clj.gpg
