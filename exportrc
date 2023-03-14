@@ -3,5 +3,6 @@ export EDITOR="vim"
 
 export LESS='-R' # properly handle colors in less
 export NAME="Drew Inglis"
+export PASSWORD_STORE_DIR="${HOME}/.password-store"
 
 [[ -f ~/local.conf.d/exportrc ]] && source ~/local.conf.d/exportrc
