@@ -2,16 +2,22 @@
 
 set -eo pipefail
 
+upstream="${1:-main}"
+force_upstream="${2}"
+
 git fetch &> /dev/null
-git checkout master &> /dev/null
+git checkout "${upstream}" &> /dev/null
 git merge --ff-only &> /dev/null
 
 for branch in $(git branch | sed 's/^\*//'); do
   applies_cleanly=no
+  if [[ -n $force_upstream ]]; then
+    git branch -u "origin/${upstream}"
+  fi
   git checkout "${branch}" &> /dev/null
-  git -P rebase origin/master &> /dev/null && applies_cleanly=yes || \
+  git -P rebase "origin/${upstream}" &> /dev/null && applies_cleanly=yes || \
     git rebase --abort &> /dev/null
-  git checkout master &> /dev/null
+  git checkout "${upstream}" &> /dev/null
   [[ ${applies_cleanly} == yes ]] && \
     git branch -d "${branch}" &> /dev/null && \
     echo "deleted branch ${branch}" || \
