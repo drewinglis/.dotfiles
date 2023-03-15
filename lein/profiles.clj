@@ -11,7 +11,8 @@
                   [lein-ancient "0.6.15"]
                   ;[lein-cprint "1.3.3"]
                   [lein-monolith "1.7.0"]
-                  [mvxcvi/whidbey "2.2.1"]]
+                  [mvxcvi/whidbey "2.2.1"
+                   :exclusions [org.clojure/clojure]]]
         :test-refresh {:notify-command ["/usr/local/bin/terminal-notifier"
                                         "-group" "lein-test-refresh" "-title"
                                         "lein test-refresh" "-message"]
