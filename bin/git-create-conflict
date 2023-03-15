@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+for file in $@; do
+  git mv "${file}" "./$(basename "${file}")"
+done
+
+git commit -am "Temporary file mv to create conflict"
+
+for file in $@; do
+  git mv "./$(basename "${file}")" "${file}"
+done
+
+git commit -am "Return files to original location"
