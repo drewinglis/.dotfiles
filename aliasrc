@@ -47,7 +47,7 @@ function git_alias () {
 git_alias gbd='git branch -d'
 # Pretend this is short for "git branch rebase -d".
 function gbrbd () {
-  git checkout $@ && git rebase master && git checkout master && git branch -d $@
+  git checkout $@ && git rebase main && git checkout main && git branch -d $@
 }
 __git_complete gbrbd _git_branch
 git_alias gcaa='git commit -a --amend'
@@ -80,7 +80,9 @@ alias lah='ls -lah'
 alias md5sum='md5 -r'
 alias octave='octave -qf'
 alias _open-pr='open $(git push-url $(git upstream | cut -d "/" -f1) | sed -e "s,git@\\(.*\\):,https://\1/," | sed "s/.git$//")/compare/$(git current-branch)?expand=1'
-alias open-pr='_open-pr 2>/dev/null || (git branch -u origin/master && _open-pr)'
+alias open-pr='_open-pr 2>/dev/null || (git branch -u origin/main && _open-pr)'
+
+complete -W "$(find $HOME/.password-store -type f | sed -E 's,(/Users/drew/.password-store/?|.gpg.*),,g' | sed -E 's,^env/?,,' | sort | uniq | grep /)" pass-env
 
 alias rla='source ~/.aliasrc'
 alias rlt='tmux source-file ~/.tmux.conf'
