@@ -88,6 +88,10 @@ alias tda='tmux detach-client -a'
 alias ssh-add='ssh-add || eval "$(ssh-agent)" && ssh-add'
 alias sqlite='sqlite3'
 alias v='vim'
+
+[[ -f '/usr/local/bin/vault' ]] && complete -C /usr/local/bin/vault vault
+[[ -f '/opt/homebrew/bin/vault' ]] && complete -C /opt/homebrew/bin/vault vault
+
 alias xin='xclip -i'
 alias xout='xclip -o'
 alias xcopy='xin'

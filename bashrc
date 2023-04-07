@@ -42,6 +42,4 @@ switch-java () {
   [[ -n $2 ]] || java -version
 }
 
-complete -C /usr/local/bin/vault vault
-
 [[ -f ~/local.conf.d/bashrc ]] && source ~/local.conf.d/bashrc
