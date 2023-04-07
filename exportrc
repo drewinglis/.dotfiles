@@ -1,8 +1,10 @@
-export DEFAULT_USER="drew"
-export EDITOR="vim"
+export DEFAULT_USER='drew'
+export EDITOR='vim'
+
+export GODEBUG='asyncpreemptoff=1'
 
 export LESS='-R' # properly handle colors in less
-export NAME="Drew Inglis"
+export NAME='Drew Inglis'
 export PASSWORD_STORE_DIR="${HOME}/.password-store"
 
 [[ -f ~/local.conf.d/exportrc ]] && source ~/local.conf.d/exportrc
