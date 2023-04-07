@@ -16,7 +16,8 @@ shopt -s checkwinsize
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+[[ -r '/usr/local/etc/profile.d/bash_completion.sh' ]] && . '/usr/local/etc/profile.d/bash_completion.sh'
+[[ -r '/opt/homebrew/etc/profile.d/bash_completion.sh' ]] && . '/opt/homebrew/etc/profile.d/bash_completion.sh'
 
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
@@ -43,6 +44,9 @@ add_to_path_if_exists "${HOME}/.rvm/bin"
 add_to_path_if_exists "${GOPATH}/bin"
 add_to_path_if_exists '/usr/local/heroku/bin'
 add_to_path_if_exists '/usr/local/share/npm/bin'
+add_to_path_if_exists "${HOME}/local.conf.d/bin"
+
+[[ -f '/opt/homebrew/bin/brew' ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
 command -v pyenv-virtualenv-init > /dev/null 2>&1 && eval "$( pyenv virtualenv-init - )"
 command -v dircolors >/dev/null 2>&1 && eval "$( dircolors -b ~/.dircolors )"

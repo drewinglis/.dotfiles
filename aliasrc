@@ -32,7 +32,10 @@ alias rrg='rg --exclude-dir log --exclude-dir tmp --exclude-dir vendor'
 #
 # make sure __git_complete exists
 type -t __git_complete >/dev/null || if [[ is_darwin ]]; then
-  source /usr/local/etc/bash_completion.d/git-completion.bash
+  OLD_HOMEBREW_PATH=/usr/local/etc/bash_completion.d/git-completion.bash
+  [[ -f "${OLD_HOMEBREW_PATH}" ]] && source "${OLD_HOMEBREW_PATH}"
+  NEW_HOMEBREW_PATH=/opt/homebrew/etc/bash_completion.d/git-completion.bash
+  [[ -f "${NEW_HOMEBREW_PATH}" ]] && source "${NEW_HOMEBREW_PATH}"
 else
   source /usr/share/bash-completion/completions/git
 fi
