@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 environment=''
 
 while [ $# -gt 0 ]; do
@@ -13,6 +15,8 @@ while [ $# -gt 0 ]; do
     environment="${environment} $(pass show "${entry}")"
   fi
 done
+
+set +e
 
 if [ $# -gt 0 ]; then
   (eval export $environment && exec "$@")
