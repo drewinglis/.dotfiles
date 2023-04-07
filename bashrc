@@ -38,7 +38,8 @@ export PS1="${GREEN_ESCAPE}\w${ESCAPE_END}\$(display_git_branch)\n${BLUE_ESCAPE}
 
 switch-java () {
   export JAVA_HOME=$(/usr/libexec/java_home -v $1)
-  java -version
+
+  [[ -n $2 ]] || java -version
 }
 
 complete -C /usr/local/bin/vault vault
