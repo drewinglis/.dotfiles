@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+# rosalita
+# the little rosie
+# https://cacm.acm.org/magazines/2016/7/204032-why-google-stores-billions-of-lines-of-code-in-a-single-repository/fulltext
+
+set -eo pipefail
+
+come_out_tonight() {
+  local ROSALITA_ACTIVITIES=('playing some pool...' 'skipping some school...' 'acting real cool...' 'staying out all night...' 'feeling all right 8)')
+  local length=${#ROSALITA_ACTIVITIES[@]}
+  local index=$(($RANDOM % $length))
+  echo "${ROSALITA_ACTIVITIES[$index]}"
+  sleep 10 # sleep to get around github API rate limits
+}
+
+if [[ $# -lt 3 ]]; then
+  echo 'Usage: title-prefix body-template-file directory-1 [directory-2 [directory-3 ...]]'
+  echo '  Instances of <part> in body-template-file will be replaced with the current directory.'
+  exit 1
+fi
+
+readonly TITLE_PREFIX="${1}"
+readonly BODY_TEMPLATE_FILE="${2}"
+shift 2
+
+for directory in $@; do
+  echo "Processing ${directory}..."
+  title="${TITLE_PREFIX} ${directory}"
+  titlestub="$(echo $title | sed -E 's/[^A-Za-z0-9]//g')"
+  git stash
+  git co -b "drewinglis-rosalita-${titlestub}" 'origin/main'
+  git stash pop
+  git add "${directory}"
+  git commit -m "${title}"
+  git push origin
+  create-github-pr "${title}" "$(cat "${BODY_TEMPLATE_FILE}" | sed -E "s,<part>,${directory},g")"
+
+  come_out_tonight
+done
