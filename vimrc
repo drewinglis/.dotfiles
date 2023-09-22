@@ -53,8 +53,8 @@ inoremap  <Right>  <NOP>
 " Look for a file to edit in the current directory
 nmap <leader>e :e ./<CR>
 
-" Write out the current buffer
 nmap <leader>w :w<CR>
+nmap <leader>n :n<CR>
 
 " Cycle through most recently used buffers
 nmap <leader>up :BuffergatorMruCyclePrev<CR>
