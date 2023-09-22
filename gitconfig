@@ -1,7 +1,7 @@
 [user]
   name = Drew Inglis
   email = drew@drewinglis.com
-	signingkey = 5F4F4C89E9A1A78309355638C8D57417246F0700
+	signingkey = E2934CD3C9929DE500F93511E46F67F8516CB367
 [core]
   excludesfile = ~/.gitignore
   editor = vim
