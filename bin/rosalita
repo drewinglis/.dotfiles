@@ -28,13 +28,14 @@ for directory in $@; do
   echo "Processing ${directory}..."
   title="${TITLE_PREFIX} ${directory}"
   titlestub="$(echo $title | sed -E 's/[^A-Za-z0-9]//g')"
+  body="$(cat "${BODY_TEMPLATE_FILE}" | sed -E "s,<part>,${directory},g")"
   git stash
   git co -b "drewinglis-rosalita-${titlestub}" 'origin/main'
   git stash pop
   git add "${directory}"
-  git commit -m "${title}"
+  git commit -m "${title}\n\n${body}"
   git push origin
-  create-github-pr "${title}" "$(cat "${BODY_TEMPLATE_FILE}" | sed -E "s,<part>,${directory},g")"
+  create-github-pr "${title}" "${body}"
 
   come_out_tonight
 done
