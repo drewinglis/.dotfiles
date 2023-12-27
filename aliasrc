@@ -31,13 +31,15 @@ alias rrg='rg --exclude-dir log --exclude-dir tmp --exclude-dir vendor'
 #   git_alias gb='git branch'
 #
 # make sure __git_complete exists
-type -t __git_complete >/dev/null || if [[ is_darwin ]]; then
-  OLD_HOMEBREW_PATH=/usr/local/etc/bash_completion.d/git-completion.bash
-  [[ -f "${OLD_HOMEBREW_PATH}" ]] && source "${OLD_HOMEBREW_PATH}"
-  NEW_HOMEBREW_PATH=/opt/homebrew/etc/bash_completion.d/git-completion.bash
-  [[ -f "${NEW_HOMEBREW_PATH}" ]] && source "${NEW_HOMEBREW_PATH}"
-else
-  source /usr/share/bash-completion/completions/git
+if ! type -t __git_complete >/dev/null; then
+  if is_darwin; then
+    OLD_HOMEBREW_PATH=/usr/local/etc/bash_completion.d/git-completion.bash
+    [[ -f "${OLD_HOMEBREW_PATH}" ]] && source "${OLD_HOMEBREW_PATH}"
+    NEW_HOMEBREW_PATH=/opt/homebrew/etc/bash_completion.d/git-completion.bash
+    [[ -f "${NEW_HOMEBREW_PATH}" ]] && source "${NEW_HOMEBREW_PATH}"
+  else
+    source /usr/share/bash-completion/completions/git
+  fi
 fi
 
 function git_alias () {
@@ -67,7 +69,7 @@ alias irssi='TERM=screen-256color irssi'
 alias jsw='jekyll serve -w'
 
 # aliases for ls
-if [[ is_darwin ]]; then
+if is_darwin; then
   alias ls='ls -G'
 else
   alias ls='ls --color=auto'
@@ -82,7 +84,9 @@ alias octave='octave -qf'
 alias _open-pr='open $(git push-url $(git upstream | cut -d "/" -f1) | sed -e "s,git@\\(.*\\):,https://\1/," | sed "s/.git$//")/compare/$(git current-branch)?expand=1'
 alias open-pr='_open-pr 2>/dev/null || (git branch -u origin/main && _open-pr)'
 
-complete -W "$(find $HOME/.password-store -type f | sed -E 's,(/Users/drew/.password-store/?|.gpg.*),,g' | sed -E 's,^env/?,,' | sort | uniq | grep /)" pass-env
+if [[ -f "${HOME}/.password-store" ]]; then
+  complete -W "$(find $HOME/.password-store -type f | sed -E 's,(/Users/drew/.password-store/?|.gpg.*),,g' | sed -E 's,^env/?,,' | sort | uniq | grep /)" pass-env
+fi
 
 alias rla='source ~/.aliasrc'
 alias rlt='tmux source-file ~/.tmux.conf'

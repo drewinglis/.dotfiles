@@ -57,7 +57,7 @@
 [receive]
   fsckobjects = true
 [init]
-  templatedir = /Users/drew/.git_template
+  templatedir = ~/.git_template
 [gpg]
 	program = gpg
 [checkout]
