@@ -1,7 +1,7 @@
 [user]
   name = Drew Inglis
   email = drew@drewinglis.com
-	signingkey = E2934CD3C9929DE500F93511E46F67F8516CB367
+  signingkey = E2934CD3C9929DE500F93511E46F67F8516CB367
 [core]
   excludesfile = ~/.gitignore
   editor = vim
@@ -53,12 +53,12 @@
   fsckobjects = true
 [fetch]
   fsckobjects = true
-	prune = true
+  prune = true
 [receive]
   fsckobjects = true
 [init]
   templatedir = ~/.git_template
 [gpg]
-	program = gpg
+  program = gpg
 [checkout]
-	defaultRemote = origin
+  defaultRemote = origin
