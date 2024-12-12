@@ -84,8 +84,8 @@ alias octave='octave -qf'
 alias _open-pr='open $(git push-url $(git upstream | cut -d "/" -f1) | sed -e "s,git@\\(.*\\):,https://\1/," | sed "s/.git$//")/compare/$(git current-branch)?expand=1'
 alias open-pr='_open-pr 2>/dev/null || (git branch -u origin/main && _open-pr)'
 
-if [[ -f "${HOME}/.password-store" ]]; then
-  complete -W "$(find $HOME/.password-store -type f | sed -E 's,(/Users/drew/.password-store/?|.gpg.*),,g' | sed -E 's,^env/?,,' | sort | uniq | grep /)" pass-env
+if [[ -d "${PASSWORD_STORE_DIR}" ]]; then
+  complete -W "$(find "${PASSWORD_STORE_DIR}" -type f -name '*.gpg' | sed -E "s,(${PASSWORD_STORE_DIR}/?|.gpg$),,g" | sed -E 's,^env/?,,' | sort | uniq)" pass-env
 fi
 
 alias rla='source ~/.aliasrc'
