@@ -58,6 +58,7 @@
   fsckobjects = true
 [init]
   templatedir = ~/.git_template
+  defaultBranch = main
 [gpg]
   program = gpg
 [checkout]
