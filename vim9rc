@@ -1,0 +1,9 @@
+vim9script
+# options for vimcomplete
+var options = {
+  completor: {
+    noNewlineInCompletionEver: true,
+  },
+}
+autocmd VimEnter * g:VimCompleteOptionsSet(options)
+g:vimcomplete_tab_enable = 1

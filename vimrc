@@ -104,3 +104,5 @@ augroup drewinglis_generic_autocmds
   autocmd WinNew * let w:m=''
   autocmd FileType,BufEnter * let w:m=OverLength(w:m)
 augroup END
+
+source ~/.vim9rc
