@@ -68,7 +68,18 @@ nnoremap <leader>sh :sp<CR>
 nnoremap <leader>fc :execute "e ".substitute(expand("%:p"), '/test/\(.*\)_test\.\(.*\)', '/src/\1.\2', "")<CR>
 nnoremap <leader>ft :execute "e ".substitute(expand("%:p"), '/src/\(.*\)\.\(.*\)', '/test/\1_test.\2', "")<CR>
 
-#vimcomplete config
+# lsp config, used below in LspAddServer
+var lspServers = [
+  {
+    name: 'golang',
+    filetype: ['go', 'gomod'],
+    path: $HOME .. '/.goenv/shims/gopls',
+    args: ['serve'],
+    syncInit: v:true,
+  },
+]
+
+# vimcomplete config, used below in VimCompleteOptionsSet
 var vimcompleteOptions = {
   completor: {
     noNewlineInCompletionEver: true,
@@ -99,6 +110,7 @@ augroup drewinglis_generic_autocmds
   # Fix to edit crontab files in place
   autocmd BufEnter crontab.* setlocal backupcopy=yes
 
+  autocmd VimEnter * g:LspAddServer(lspServers)
   autocmd VimEnter * g:VimCompleteOptionsSet(vimcompleteOptions)
 augroup END
 
