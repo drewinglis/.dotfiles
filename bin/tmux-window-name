@@ -1,6 +1,8 @@
 #!/bin/bash
 
 readonly TARGET_PWD="${1}"
+readonly GIT_BRANCH_MAX_LENGTH=50
+readonly WINDOW_NAME_MAX_LENGTH=100
 
 # Use local override if applicable.
 readonly LOCAL_OVERRIDE_SCRIPT="$HOME/local.conf.d/bin/tmux-window-name"
@@ -41,7 +43,7 @@ find_git_repo() {
 find_git_branch() {
   head=$(< "${1}.git/HEAD")
   if [[ ${head} == ref:\ refs/heads/* ]]; then
-    echo "${head#*/*/}"
+    echo "${head#*/*/}" | head -c ${GIT_BRANCH_MAX_LENGTH}
   elif [[ ${head} != '' ]]; then
     echo '(detached)'
   else
@@ -58,4 +60,4 @@ if [[ ${GIT_DIR} != '' ]]; then
   exit 0
 fi
 
-echo $2
+echo $2 | head -c ${WINDOW_NAME_MAX_LENGTH}
