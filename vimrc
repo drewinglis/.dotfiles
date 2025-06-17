@@ -87,7 +87,7 @@ augroup drewinglis_generic_autocmds
   autocmd BufRead,BufNewFile .gitmodules setlocal noexpandtab
 
   " Go specific styles. I can tolerate tabs, but not 8-width tabs.
-  autocmd FileType go setlocal tabstop=2 shiftwidth=2 noexpandtab
+  autocmd FileType go setlocal tabstop=2 shiftwidth=2 noexpandtab textwidth=1000
 
   " Fix to edit crontab files in place
   autocmd BufEnter crontab.* setlocal backupcopy=yes
