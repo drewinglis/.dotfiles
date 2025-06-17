@@ -38,9 +38,6 @@ colorscheme solarized           " Use the solarized dark colorscheme
 highlight ColorColumn ctermbg=Black
 highlight OverLength ctermbg=Black
 
-" Close the YCM autocomplete window after entering insert mode again
-let g:ycm_autoclose_preview_window_after_insertion=1
-
 " remove training wheels
 map <Left> <Nop>
 map <Right> <Nop>
