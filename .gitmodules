@@ -25,3 +25,6 @@
 [submodule "vim/bundle/vimcomplete"]
 	path = vim/bundle/vimcomplete
 	url = git@github.com:girishji/vimcomplete.git
+[submodule "vim/bundle/lsp"]
+	path = vim/bundle/lsp
+	url = git@github.com:yegappan/lsp.git
