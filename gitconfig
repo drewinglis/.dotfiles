@@ -63,3 +63,6 @@
   program = gpg
 [checkout]
   defaultRemote = origin
+
+[url "git@github.com:launchdarkly"]
+  email = drewinglis@launchdarkly.com
