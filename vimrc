@@ -68,6 +68,10 @@ nnoremap <leader>sh :sp<CR>
 nnoremap <leader>fc :execute "e ".substitute(expand("%:p"), '/test/\(.*\)_test\.\(.*\)', '/src/\1.\2', "")<CR>
 nnoremap <leader>ft :execute "e ".substitute(expand("%:p"), '/src/\(.*\)\.\(.*\)', '/test/\1_test.\2', "")<CR>
 
+# vim-go config (unused)
+g:go_def_mode = 'gopls'
+g:go_info_mode = 'gopls'
+
 # lsp config, used below in LspAddServer
 var lspServers = [
   {
