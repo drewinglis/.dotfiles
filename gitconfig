@@ -47,6 +47,13 @@
   untracked = white
 [push]
   default = current
+[init]
+  templatedir = ~/.git_template
+  defaultBranch = main
+[gpg]
+  program = gpg
+[checkout]
+  defaultRemote = origin
 
 # check hashes
 [transfer]
@@ -56,13 +63,7 @@
   prune = true
 [receive]
   fsckobjects = true
-[init]
-  templatedir = ~/.git_template
-  defaultBranch = main
-[gpg]
-  program = gpg
-[checkout]
-  defaultRemote = origin
 
+# commit emails
 [url "git@github.com:launchdarkly"]
   email = drewinglis@launchdarkly.com
