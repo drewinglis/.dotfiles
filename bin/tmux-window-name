@@ -8,7 +8,9 @@ readonly WINDOW_NAME_MAX_LENGTH=100
 readonly LOCAL_OVERRIDE_SCRIPT="$HOME/local.conf.d/bin/tmux-window-name"
 local_override=''
 
-[[ -f ${LOCAL_OVERRIDE_SCRIPT} ]] && local_override=$(${LOCAL_OVERRIDE_SCRIPT} ${TARGET_PWD} ${2})
+if [[ -f ${LOCAL_OVERRIDE_SCRIPT} ]]; then
+  local_override="$(${LOCAL_OVERRIDE_SCRIPT} ${TARGET_PWD} ${2})"
+fi
 
 if [[ ${local_override} != '' ]]; then
   echo ${local_override}
