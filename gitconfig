@@ -54,6 +54,8 @@
   program = gpg
 [checkout]
   defaultRemote = origin
+[log]
+  date = local
 
 # check hashes
 [transfer]
