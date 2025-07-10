@@ -56,3 +56,8 @@ stty -ixon
 
 source ~/.exportrc
 source ~/.aliasrc
+
+if [[ "${TERM_PROGRAM}" == 'vscode' ]]; then
+  export PAGER=cat
+  export GIT_PAGER=cat
+fi
