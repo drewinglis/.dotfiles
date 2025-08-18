@@ -1,3 +1,12 @@
 #!/usr/bin/env bash
 
-brew install coreutils tmux rcm bash vim pass gnu-sed universal-ctags
+brew install \
+  bash \
+  bash-completion@2 \
+  coreutils \
+  gnu-sed \
+  pass \
+  rcm \
+  tmux \
+  universal-ctags \
+  vim
