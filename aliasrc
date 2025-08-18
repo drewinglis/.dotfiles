@@ -1,3 +1,5 @@
+alias app="cd $(git rev-parse --git-dir)/.."
+
 alias be='bundle exec'
 
 alias cl='./node_modules/.bin/coffeelint $(find ./* -name "*.coffee" -not -path "./node_modules/*")'
