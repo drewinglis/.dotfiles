@@ -103,8 +103,8 @@ alias v='vim'
 [[ -f '/usr/local/bin/vault' ]] && complete -C /usr/local/bin/vault vault
 [[ -f '/opt/homebrew/bin/vault' ]] && complete -C /opt/homebrew/bin/vault vault
 
-alias xin='xclip -i'
-alias xout='xclip -o'
+alias xin='xclip -selection clipboard'
+alias xout='xclip -o -selection clipboard'
 alias xcopy='xin'
 alias xpaste='xout'
 
