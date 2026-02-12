@@ -20,6 +20,7 @@
   fff = !git fetch && git merge --ff-only
   flat-rebase = !git rebase -i "$(git diffbase)"
   kill = branch -d
+  merge-origin = !git merge "origin/$(git branch --show-current)"
   new = checkout -b
   pr = !open-pr
   pull-url = remote get-url --pull
