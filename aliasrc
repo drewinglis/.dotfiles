@@ -1,4 +1,4 @@
-alias app="cd $(git rev-parse --git-dir)/.."
+alias app='cd $(git rev-parse --git-dir)/..'
 
 alias be='bundle exec'
 
