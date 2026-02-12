@@ -1,1 +1,5 @@
 test --test_output=errors
+
+build --local_resources=memory=HOST_RAM*.5
+build --local_resources=cpu=HOST_CPUS-2
+build -c dbg --strip=never
