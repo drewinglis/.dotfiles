@@ -1,3 +1,15 @@
 bin/zkcli
 lein/repl-history
 lein/credentials.clj.gpg
+
+# Claude Code session data and caches
+claude/history.jsonl
+claude/cache/
+claude/debug/
+claude/file-history/
+claude/session-env/
+claude/shell-snapshots/
+claude/stats-cache.json
+claude/plans/
+claude/todos/
+claude/projects/
