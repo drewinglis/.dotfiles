@@ -1,0 +1,6 @@
+-- Tell psql to use a pager when appropriate.
+\pset pager on
+
+-- Explicitly set the pager to less with -F (quit if one screen),
+-- -X (don’t clear on exit), and -R (preserve color/ANSI).
+\setenv PAGER 'less -F -X -R'
