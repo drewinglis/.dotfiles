@@ -2,7 +2,7 @@ bin/zkcli
 lein/repl-history
 lein/credentials.clj.gpg
 
-# Claude Code session data and caches
+# Machine-wide Claude Code stuff
 claude/history.jsonl
 claude/cache/
 claude/debug/
@@ -13,3 +13,6 @@ claude/stats-cache.json
 claude/plans/
 claude/todos/
 claude/projects/
+
+# Repository-local Claude Code stuff
+.claude/**/*.local.*
