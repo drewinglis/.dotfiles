@@ -1,0 +1,6 @@
+{
+  "name": "usage-tracker",
+  "version": "1.0.0",
+  "description": "Track and display Claude API usage metrics",
+  "author": "Drew Inglis"
+}
