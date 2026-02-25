@@ -5,6 +5,7 @@ brew install \
   bash-completion@2 \
   coreutils \
   gnu-sed \
+  gnu-getopt \
   pass \
   rcm \
   tmux \
