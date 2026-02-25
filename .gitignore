@@ -10,10 +10,7 @@ claude/file-history/
 claude/history.jsonl
 claude/ide/
 claude/plans/
-claude/plugins/cache/
-claude/plugins/installed_plugins.json
-claude/plugins/known_marketplaces.json
-claude/plugins/marketplaces/
+claude/plugins/
 claude/projects/
 claude/session-env/
 claude/shell-snapshots/
