@@ -3,6 +3,7 @@ lein/repl-history
 lein/credentials.clj.gpg
 
 # Machine-wide Claude Code stuff
+claude/backups/
 claude/cache/
 claude/debug/
 claude/file-history/
