@@ -1,9 +1,2 @@
 {
-  "model": "opus[1m]",
-  "enabledPlugins": {
-    "gopls-lsp@claude-plugins-official": true,
-    "launchdarkly@launchdarkly-agent-skills": true,
-    "confluence@drewinglis-agent-skills": true
-  },
-  "effortLevel": "medium"
 }
