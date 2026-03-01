@@ -96,7 +96,7 @@ alias rlx='DISPLAY=:0 xmodmap ~/.Xmodmap'
 alias RLX=rlx
 alias tad='tmux attach -d'
 alias tda='tmux detach-client -a'
-alias ssh-add='ssh-add || eval "$(ssh-agent)" && ssh-add'
+alias ssh-add='if ! ssh-add; then eval "$(ssh-agent)" && ssh-add; fi'
 alias sqlite='sqlite3'
 alias v='vim'
 
