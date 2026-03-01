@@ -34,7 +34,14 @@ function prompt_command() {
 }
 PROMPT_COMMAND=prompt_command
 
-export PS1="${GREEN_ESCAPE}\w${ESCAPE_END}\$(display_git_branch)\n${BLUE_ESCAPE}\A \$${ESCAPE_END} "
+function maybe_display_hostname() {
+  if [[ -n "$SSH_CONNECTION" ]]; then
+    printf "\\h: "
+  fi
+}
+export -f maybe_display_hostname
+
+export PS1="${GREEN_ESCAPE}\w${ESCAPE_END}\$(display_git_branch)\n${BLUE_ESCAPE}$(maybe_display_hostname)\A \$${ESCAPE_END} "
 
 switch-java () {
   export JAVA_HOME=$(/usr/libexec/java_home -v $1)
