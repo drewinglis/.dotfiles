@@ -16,6 +16,7 @@ claude/session-env/
 claude/shell-snapshots/
 claude/stats-cache.json
 claude/todos/
+claude/**/*.local.*
 
 # Repository-local Claude Code stuff
 .claude/**/*.local.*
