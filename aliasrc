@@ -68,7 +68,7 @@ alias grso='git remote show origin'
 alias hello='echo hello'
 alias hostedit='sudo vim /etc/hosts'
 alias irssi='TERM=screen-256color irssi'
-alias jsw='jekyll serve -w'
+alias jsw='[[ -f .bundle/config ]] && bundle exec jekyll serve -w || jekyll serve -w'
 
 # aliases for ls
 if is_darwin; then
