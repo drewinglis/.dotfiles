@@ -28,3 +28,6 @@
 [submodule "vim/bundle/lsp"]
 	path = vim/bundle/lsp
 	url = git@github.com:yegappan/lsp.git
+[submodule "vim/bundle/vim-beancount"]
+	path = vim/bundle/vim-beancount
+	url = git@github.com:nathangrigg/vim-beancount.git
