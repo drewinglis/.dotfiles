@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+targets=()
+
+for file_dir in $(git diff --name-only $@ | xargs -n 1 dirname | sort | uniq); do
+  if [[ -f "${file_dir}/BUILD.bazel" ]]; then
+    targets+=("//${file_dir}/...")
+  fi
+done
+
+bazel test "${targets[@]}"
