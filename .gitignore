@@ -12,16 +12,16 @@ claude/ide/
 claude/paste-cache/
 claude/plans/
 claude/plugins/
+claude/policy-limits.json
 claude/projects/
 claude/session-env/
+claude/sessions/
+claude/settings.json
 claude/shell-snapshots/
 claude/stats-cache.json
-claude/todos/
-claude/policy-limits.json
-claude/settings.json
-claude/sessions/
 claude/tasks/
 claude/telemetry/
+claude/todos/
 
 # Repository-local Claude Code stuff
 .claude/**/*.local.*
