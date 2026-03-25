@@ -3,3 +3,5 @@
 _site
 tags
 .netrwhist
+
+.claude/**/*.local.*
