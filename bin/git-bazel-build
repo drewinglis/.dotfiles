@@ -4,7 +4,7 @@ set -eo pipefail
 
 targets=()
 
-for file_dir in $(git diff --name-only $@ | xargs -n 1 dirname | sort | uniq); do
+for file_dir in $(git diff --name-only $@ | xargs -n 1 dirname | sort | uniq | grep -v '^.$'); do
   if [[ -f "${file_dir}/BUILD.bazel" ]]; then
     targets+=("//${file_dir}/...")
   fi
