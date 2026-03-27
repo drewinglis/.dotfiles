@@ -22,6 +22,7 @@ claude/stats-cache.json
 claude/tasks/
 claude/telemetry/
 claude/todos/
+claude/**/*.local.*
 
 # Repository-local Claude Code stuff
 .claude/**/*.local.*
