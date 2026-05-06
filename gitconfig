@@ -68,5 +68,5 @@
   fsckobjects = true
 
 # commit emails
-[url "git@github.com:launchdarkly"]
-  email = drewinglis@launchdarkly.com
+[includeIf "hasconfig:remote.*.url:git@github.com:launchdarkly/**"]
+  path = ~/.gitconfig-launchdarkly
