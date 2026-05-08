@@ -3,13 +3,16 @@ name: shipit
 description: >-
   Resolve a Jira issue (existing or newly created under an epic),
   commit staged changes, and open a draft PR on GitHub — all linked
-  by the Jira ticket key
+  by the Jira ticket key. On a branch that already has a PR, skip
+  Jira resolution and PR creation; just commit and push.
 ---
 
 # Shipit
 
 Resolve a Jira issue, commit staged/unstaged changes, and open a draft
 GitHub PR — all linked with the Jira ticket key (e.g. `[ID-1234]`).
+On a branch that already has an open/draft PR, skip Jira resolution
+and PR creation and just commit and push to the existing PR.
 
 ## Usage
 
@@ -22,6 +25,11 @@ GitHub PR — all linked with the Jira ticket key (e.g. `[ID-1234]`).
   via `epic-cache.json`. If omitted, the skill infers from context.
 - `--project <key>` — Jira project for epic-name lookup. Defaults to
   `config.default_project`.
+
+If the current branch already has an open or draft PR, the skill runs
+in **follow-up mode**: it commits, pushes, and reports the existing PR
+URL. Jira resolution and PR creation are skipped. Any `<arg>` or
+`--project` flag is ignored in that mode.
 
 ## Configuration
 
@@ -42,19 +50,44 @@ References to config values below are written as `config.<key>`.
 
 ---
 
-## Section 1: Resolve the Jira issue
+## Section 0: Gather context and detect mode
 
-Goal: produce a `(jira_key, summary)` pair for Sections 2 and 3.
-
-### 1a. Review the changes (shared prerequisite)
+Goal: collect the diff context once, and decide whether this run is in
+**initial mode** (no PR yet — full Jira + PR flow) or **follow-up
+mode** (PR already exists — commit and push only).
 
 Run in parallel:
 1. `git status` — changed/untracked files
 2. `git diff` — full diff (staged + unstaged)
 3. `git log --oneline -5` — for commit message style
+4. `gh pr view --json number,title,url --jq '{number,title,url}'` —
+   detect an existing PR for the current branch
 
-Hold this context — it's used for candidate matching, Task drafting,
-the commit message, and the PR body.
+Hold the diff context — it's used in every later section (candidate
+matching, Task drafting, commit message, PR body).
+
+**Branch on the `gh pr view` exit code:**
+
+- **Exit 0 (PR exists)** → **follow-up mode**:
+  - Capture `number`, `title`, `url`.
+  - Parse the Jira key from the PR title with the regex
+    `\[([A-Z]+-\d+)\]`. If absent, fall back to the current branch
+    name (e.g. `id-1234-foo` → `ID-1234`). If neither has one, proceed
+    with no Jira prefix.
+  - **Skip Section 1 entirely.**
+  - In Section 2, draft the commit message from the diff with the
+    captured Jira prefix (or none) — no Jira API call.
+  - In Section 3, run only 3a (push) and 3e (report); skip 3b–3d.
+  - In 3e, the PR URL is the captured `url`.
+
+- **Non-zero exit (no PR)** → **initial mode**: continue to Section 1.
+
+---
+
+## Section 1: Resolve the Jira issue
+
+Goal: produce a `(jira_key, summary)` pair for Sections 2 and 3.
+**Skipped entirely in follow-up mode.**
 
 ### 1b. Determine the Jira key
 
@@ -97,24 +130,23 @@ epic name, and re-run the dispatch above.
 `getJiraIssue` with `config.jira_cloud_id`.
 
 - **`issuetype` is `Epic`:**
-  1. From the Section 1a context, draft:
+  1. From the Section 0 context, draft:
      - Jira task summary (imperative, <80 chars)
      - 1-2 sentence Jira description
-  2. Present to the user for approval.
-  3. Look up the current sprint:
+  2. Look up the current sprint:
      ```
      project = <PROJECT> AND sprint in openSprints()
        ORDER BY created DESC
      ```
      Read `config.sprint_field` from the first result for the sprint ID.
-  4. Create a Task with:
+  3. Create a Task with:
      - `summary`: drafted summary
      - `description`: drafted description
      - `parent`: the epic key
      - `assignee`: `config.assignee_account_id`
      - `config.sprint_field`: sprint ID as a **bare integer**, not a
        string or object — the API rejects anything else
-  5. Use the new task's key as `jira_key`; the drafted summary becomes
+  4. Use the new task's key as `jira_key`; the drafted summary becomes
      `summary` for Sections 2 and 3.
 
 - **Any other `issuetype`** (Task, Story, Bug, …):
@@ -136,7 +168,14 @@ approval gate** — commit immediately.
     `summary`, but **override based on the diff** if the staged work
     has diverged meaningfully from it.
   - **Body:** optional 1–3 sentence description derived from the
-    Section 1a `git diff` context.
+    Section 0 `git diff` context.
+- **Follow-up mode** (Section 0 found an existing PR) → draft from
+  the diff:
+  - **Title:** `[<JIRA-KEY>] <diff-derived summary>` using the Jira
+    key parsed in Section 0; if no key was found, just
+    `<diff-derived summary>`.
+  - **Body:** optional 1–3 sentence description derived from the
+    Section 0 `git diff` context.
 
 ### 2b. Stage files
 
@@ -166,7 +205,11 @@ The commit hash, fed into Section 3.
 
 ---
 
-## Section 3: Open the GitHub PR
+## Section 3: Push (and PR if needed)
+
+In **follow-up mode** (Section 0 found an existing PR), run only **3a
+and 3e**; skip 3b–3d. The existing PR's body is left untouched. In
+**initial mode**, run all of 3a–3e.
 
 ### 3a. Push the branch
 
@@ -185,7 +228,7 @@ body conventions into context.
 ### 3c. Write the PR body
 
 Following the `pr-style` instructions, write a PR body informed by the
-Section 1a diff context. Append this footer to the body:
+Section 0 diff context. Append this footer to the body:
 
 ```
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
@@ -208,9 +251,11 @@ The title matches the commit title verbatim.
 
 Output a summary block:
 
-- **Jira:** `https://<config.jira_host>/browse/<KEY>`
-- **PR:** the GitHub URL from `gh pr create`
-- **Commit:** the hash from Section 2
+- **Jira:** `https://<config.jira_host>/browse/<KEY>` — omit this line
+  in follow-up mode if no Jira key was found.
+- **PR:** the GitHub URL — from `gh pr create` in initial mode, or
+  the `url` captured in Section 0 in follow-up mode.
+- **Commit:** the hash from Section 2.
 
 Then ask the user if they'd like to open the PR in the browser. If
 yes, run `open <PR-URL>`.
