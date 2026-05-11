@@ -9,6 +9,7 @@ claude/debug/
 claude/file-history/
 claude/history.jsonl
 claude/ide/
+claude/.last-cleanup
 claude/paste-cache/
 claude/plans/
 claude/plugins/
