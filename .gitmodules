@@ -19,9 +19,6 @@
 [submodule "vim/bundle/vim-polygot"]
 	path = vim/bundle/vim-polygot
 	url = git@github.com:sheerun/vim-polyglot.git
-[submodule "vim/bundle/salt-vim"]
-	path = vim/bundle/salt-vim
-	url = git@github.com:saltstack/salt-vim.git
 [submodule "vim/bundle/vimcomplete"]
 	path = vim/bundle/vimcomplete
 	url = git@github.com:girishji/vimcomplete.git
