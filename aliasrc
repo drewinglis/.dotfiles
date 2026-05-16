@@ -2,6 +2,8 @@ alias app='cd $(git rev-parse --git-dir)/..'
 
 alias be='bundle exec'
 
+alias bw-set-session='export BW_SESSION="$(bw unlock --raw)"'
+
 alias cl='./node_modules/.bin/coffeelint $(find ./* -name "*.coffee" -not -path "./node_modules/*")'
 
 # aliases for ctags
