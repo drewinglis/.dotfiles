@@ -6,6 +6,7 @@ lein/credentials.clj.gpg
 claude/**/*.local.*
 claude/.credentials.json
 claude/.last-cleanup
+claude/.last-update-result.json
 claude/backups/
 claude/cache/
 claude/debug/
