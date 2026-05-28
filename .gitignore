@@ -3,13 +3,16 @@ lein/repl-history
 lein/credentials.clj.gpg
 
 # Machine-wide Claude Code stuff
+claude/**/*.local.*
+claude/.credentials.json
+claude/.last-cleanup
 claude/backups/
 claude/cache/
 claude/debug/
 claude/file-history/
 claude/history.jsonl
 claude/ide/
-claude/.last-cleanup
+claude/mcp-needs-auth-cache.json
 claude/paste-cache/
 claude/plans/
 claude/plugins/
@@ -23,7 +26,6 @@ claude/stats-cache.json
 claude/tasks/
 claude/telemetry/
 claude/todos/
-claude/**/*.local.*
 
 # Repository-local Claude Code stuff
 .claude/**/*.local.*
