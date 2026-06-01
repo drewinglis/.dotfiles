@@ -53,9 +53,18 @@ abs_file=$(resolve_path "$file")
 [[ -n "$abs_top" && -n "$abs_file" ]] || exit 0
 
 # Inside ~/.claude (harness-managed: plans/, projects/, sessions/, tasks/) → allow.
+# ~/.claude is a symlink into this dotfiles repo, so realpath resolves it to
+# a path without a literal `.claude` segment — matched here by prefix, not by
+# the segment check below.
 abs_claude=$(resolve_path "$HOME/.claude")
 if [[ -n "$abs_claude" ]] && \
    [[ "$abs_file" == "$abs_claude" || "$abs_file" == "$abs_claude"/* ]]; then
+  exit 0
+fi
+
+# Inside any .claude directory → allow, even when it sits outside the session
+# worktree (e.g. the parent checkout's .claude/settings.local.json).
+if [[ "$abs_file" == *"/.claude" || "$abs_file" == *"/.claude/"* ]]; then
   exit 0
 fi
 
