@@ -9,10 +9,12 @@ claude/.last-cleanup
 claude/.last-update-result.json
 claude/backups/
 claude/cache/
+claude/daemon*
 claude/debug/
 claude/file-history/
 claude/history.jsonl
 claude/ide/
+claude/jobs/
 claude/mcp-needs-auth-cache.json
 claude/paste-cache/
 claude/plans/
