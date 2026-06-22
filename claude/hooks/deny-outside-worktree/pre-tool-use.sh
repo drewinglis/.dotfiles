@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # PreToolUse hook for Edit|Write|NotebookEdit.
 #
-# Denies the tool call when the target file lives outside the git worktree
-# the session is running in. When the session is NOT inside a worktree
-# (main checkout, or a non-git directory), the hook is a no-op.
+# Denies the tool call when the target file belongs to the same git repository
+# as the session worktree but lives outside that worktree (e.g. the main
+# checkout or a sibling worktree). Files in unrelated repositories or non-git
+# paths are allowed, as are all files when the session is NOT inside a worktree
+# (main checkout, or a non-git directory).
 #
 # Fails open: any unexpected error (missing field, git failure, python
 # failure) allows the tool through rather than blocking editing entirely.
@@ -73,9 +75,25 @@ if [[ "$abs_file" == "$abs_top" || "$abs_file" == "$abs_top"/* ]]; then
   exit 0
 fi
 
-# Outside the worktree → deny with a structured reason.
+# Outside the worktree. Only block when the file belongs to the SAME git
+# repository as the session (shares its common git dir) — e.g. the main
+# checkout or a sibling worktree. Edits to unrelated repos or non-repo paths
+# are allowed. Walk up to the nearest existing directory so new (not-yet-
+# created) files resolve to a directory git can inspect.
+file_dir=$abs_file
+while [[ ! -d "$file_dir" && "$file_dir" != "/" ]]; do
+  file_dir=$(dirname "$file_dir")
+done
+file_common_dir=$(git -C "$file_dir" rev-parse --path-format=absolute \
+  --git-common-dir 2>/dev/null) || exit 0
+
+# Different repository (or not a repo) → allow.
+[[ "$(resolve_path "$file_common_dir")" == "$(resolve_path "$common_dir")" ]] \
+  || exit 0
+
+# Same repository, outside the worktree → deny with a structured reason.
 jq -nc \
-  --arg reason "File '$abs_file' is outside the session worktree ('$abs_top'). Blocked by deny-outside-worktree hook." \
+  --arg reason "File '$abs_file' is outside the session worktree ('$abs_top') but in the same repository. Blocked by deny-outside-worktree hook." \
   '{hookSpecificOutput: {hookEventName: "PreToolUse",
                           permissionDecision: "deny",
                           permissionDecisionReason: $reason}}'
