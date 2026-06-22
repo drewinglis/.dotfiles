@@ -12,8 +12,8 @@ description: >-
 
 # Project Weekly Summary
 
-Generate a project-scoped weekly recap suitable for sharing with other
-people at the company in Slack or a status update. The summary block is
+Generate a project-scoped weekly recap suitable for sharing with
+management and engineers on adjacent teams. The summary block is
 hard-capped at **280 characters** so it fits the kind of context where
 brevity matters; the raw source data is printed below for verification
 before copy-paste.
@@ -114,41 +114,68 @@ query like:
 in:#<channel> after:<SINCE_DATE>
 ```
 
-Skim the results for **important discussion only**:
+Skim the results for threads that look substantive:
 
+- High reply counts (5+)
 - Decisions ("we decided to...", "going with X")
 - Announcements ("shipped", "rolling out", "deprecated")
-- Escalations / incident threads
-- Threads with notably high reaction or reply counts
+- Escalations / customer pressure / deadline mentions
 - Cross-team or leadership-visible discussion
+
+For any thread that looks substantive, **read the full thread** using
+`mcp__plugin_slack_slack__slack_read_thread` before drawing conclusions
+about what was decided. Do not summarize a thread from the preview
+alone — decisions are often reached at the end of a long discussion.
+
+After reading, extract:
+- Decisions made (the conclusion, not the deliberation)
+- Customer or external pressure signals
+- Blocking issues or risks
+- Shipping plans or timeline commitments
+
+Also search Confluence for any decision docs or meeting notes posted in
+the same period:
+
+```
+mcp__Atlassian__searchConfluenceUsingCql: space = <relevant space> AND
+  lastmodified >= "<SINCE_DATE>" AND text ~ "<project keywords>"
+```
+
+If a substantive discussion thread ends with people jumping on a call
+(e.g. "let's chat live", "zoom link", "we're in here"), and no
+post-call summary appears in Slack or Confluence, **flag this** in the
+raw source section: "Note: a live sync occurred on <date> — decisions
+from that call may not be reflected here."
 
 Explicitly skip: routine standup posts, banter, deploy bot noise,
 greetings, and low-signal back-and-forth.
 
-If nothing rises above the noise floor, **omit Slack entirely** — the
-280-char budget cannot afford filler.
-
-Capture: a few-word description and the Slack permalink for each kept
-thread.
-
 ### Step 3: Synthesize the summary
 
-Across all gathered items (Jira issues, GitHub PRs, Slack threads),
-pick the **3-4 most newsworthy** items.
+Across all gathered items, pick the **3-4 most newsworthy** items.
 
-Prioritize in this order:
-1. Shipped user-visible features or capabilities
-2. Significant bug fixes (correctness, perf, security)
-3. Infra / process / migration milestones
-4. Notable internal discussion or decisions
+**Priority order:**
 
-Write each as a single short bullet, **past tense**, **project-focused**
-(what happened, not who did it), prefixed by `- `. Strip any verbose
-Jira summary phrasing — aim for the gist, not the title.
+1. Decisions — what the team resolved to do, and why it matters
+2. Project status — how far along vs the milestone; risks or blockers
+3. Shipped user-visible features or capabilities
+4. Significant bug fixes (correctness, perf, security)
+5. Infra / process / migration milestones
+
+Shipped work should be framed as *evidence of progress* toward the
+milestone, not as a changelog. Skip implementation details (individual
+Jira task titles, code identifiers, internal component names) unless
+they are meaningful to someone not on the team.
+
+Write each bullet in plain English, **past tense**, **project-focused**
+(what happened, not who did it), prefixed by `- `. Translate technical
+names into what they do, not what they're called. Strip Jira summary
+phrasing — aim for the gist.
 
 Optionally prepend one short summary sentence above the bullets. Only
 include it if it adds context the bullets don't already convey
-(e.g. a theme, a milestone). Omit it if it would just paraphrase.
+(e.g. a theme, a milestone, an overall status). Omit it if it would
+just paraphrase the bullets.
 
 **Verify the summary block is < 280 characters, including newlines.**
 Use `wc -c` on the exact text. If it's over:
@@ -183,6 +210,11 @@ GitHub PRs (merged last <days> days, referencing epic issues):
 Slack discussion (last <days> days):
 - <thread description>  <permalink>
 - (or: <none — omitted from summary>)
+- (flag if applicable: "Note: live sync on <date> — decisions may not be captured")
+
+Confluence (last <days> days):
+- <page title>  <url>
+- (or: <none found>)
 ```
 
 Notes on the output:
@@ -197,8 +229,13 @@ Notes on the output:
 ### Reminders for the model
 
 - The 280-char cap is **hard**. Verify with `wc -c` after composing.
-- Bullets are past tense, project-focused, not person-focused.
-- Don't pad with Slack content unless it's genuinely newsworthy.
+- Decisions and status come before shipped work. Shipped work is
+  evidence of progress, not the headline.
+- Plain English only — no Jira ticket names, no internal component
+  names, no code identifiers in the summary bullets.
+- Read full threads before concluding what was decided. A thread that
+  looks inconclusive from the preview often has a resolution at the end.
+- Flag live-call gaps explicitly rather than silently omitting them.
 - If a Jira key appears in a PR title but the issue is not in the
   configured epic's resolved set, ignore the PR. The epic is the
   source of truth.
