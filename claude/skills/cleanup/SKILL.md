@@ -82,9 +82,22 @@ Set `$WT` to the matched worktree path and `$BR` to its branch name
 
 #### 1.3 — Refresh PR state for the branch
 
-Fetch the **current** PR state for `$BR` from GitHub. Cached session
-metadata (`prState` from `list_sessions`) lags behind reality — a PR
-that merged seconds ago can still appear OPEN. Always pull fresh.
+Only applicable if the `origin` remote is GitHub. Check first:
+
+```
+git -C $WT remote get-url origin
+```
+
+If this fails (no `origin` remote), or the URL host isn't
+`github.com` (covers `https://github.com/...`,
+`git@github.com:...`, and GitHub Enterprise isn't assumed unless the
+host literally is `github.com`), skip this step entirely and record
+"PR state: n/a — origin is not GitHub" for Step 4.
+
+Otherwise, fetch the **current** PR state for `$BR` from GitHub.
+Cached session metadata (`prState` from `list_sessions`) lags behind
+reality — a PR that merged seconds ago can still appear OPEN. Always
+pull fresh.
 
 ```
 ( cd $WT && gh pr list --head $BR --state all \
@@ -200,8 +213,9 @@ About to clean up:
 Proceed? (y/n)
 ```
 
-If the PR state from Step 1.3 is anything other than `MERGED`, add
-an explicit warning under the summary block:
+If the PR state from Step 1.3 is anything other than `MERGED` or
+`n/a` (non-GitHub origin), add an explicit warning under the summary
+block:
 
 > ⚠️  PR is still `<state>`. Cleanup deletes the local worktree and
 > branch — the remote branch and PR on GitHub remain. Continue only
