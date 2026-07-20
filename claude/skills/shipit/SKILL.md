@@ -152,6 +152,20 @@ epic name, and re-run the dispatch above.
 - **Any other `issuetype`** (Task, Story, Bug, …):
   - Use the issue's key as `jira_key` and its `summary` field as
     `summary`.
+  - **Assignee** — check the issue's `assignee` field:
+    - Unassigned → assign to `config.assignee_account_id`.
+    - Assigned to someone else (account ID ≠
+      `config.assignee_account_id`) → ask the user whether to move
+      ownership to them; reassign only on yes.
+    - Already assigned to the user → leave as is.
+  - **Sprint** — check the issue's `config.sprint_field` value:
+    - If the issue is not in an active sprint, look up the current
+      sprint (same JQL as the epic path, step 2) and set
+      `config.sprint_field` to the sprint ID as a **bare integer**.
+    - Already in the active sprint → leave as is.
+  - Apply any assignee/sprint changes in a single `editJiraIssue`
+    call. Don't block on failure — report it and continue to
+    Section 2.
 
 ---
 
@@ -257,5 +271,8 @@ Output a summary block:
   the `url` captured in Section 0 in follow-up mode.
 - **Commit:** the hash from Section 2.
 
-Then ask the user if they'd like to open the PR in the browser. If
-yes, run `open <PR-URL>`.
+Then, **only if `CLAUDE_CODE_ENTRYPOINT` is `cli`** (check via the
+environment, e.g. `echo "$CLAUDE_CODE_ENTRYPOINT"`), ask the user if
+they'd like to open the PR in the browser; if yes, run
+`open <PR-URL>`. In any other entrypoint (desktop, web, IDE, etc.),
+skip the offer entirely — just report the URL.
