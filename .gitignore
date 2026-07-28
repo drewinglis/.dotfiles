@@ -21,6 +21,8 @@ claude/plans/
 claude/plugins/
 claude/policy-limits.json
 claude/projects/
+claude/remote-settings.json
+claude/scheduled-tasks/
 claude/session-env/
 claude/sessions/
 claude/settings.json
