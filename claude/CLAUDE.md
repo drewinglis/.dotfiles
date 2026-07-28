@@ -10,6 +10,7 @@
 10. **Long-running operations need checkpoints.** Multi-step refactors and migrations commit between steps so one bad turn doesn't require rewinding six.
 11. **Convention beats novelty.** In a codebase with an established pattern, use that pattern even when yours is "better." Two patterns are always worse than either alone.
 12. **Fail visibly, not silently.** A migration that "completed successfully" while skipping 14% of records on constraint violations is a bug, not a success. Surface partial failure, skipped rows, truncated output, retry exhaustion.
+13. **Comment sparingly.** Code should be self-documenting. Only add comments if they significantly improve code clarity. Comments shouldn't document behavior changes; they should only document the behavior of the current system.
 
 ## Code Style
 - Use a soft limit of 80 characters for line length and a hard limit of 120
