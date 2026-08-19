@@ -114,6 +114,21 @@ augroup drewinglis_generic_autocmds
   # Fix to edit crontab files in place
   autocmd BufEnter crontab.* setlocal backupcopy=yes
 
+  # Point tags at the git dir reported by git: in a worktree .git is a file,
+  # so the tags file written by the hooks lives outside the working tree.
+  def GitTags()
+    if exists('b:git_tags')
+      return
+    endif
+    var path = systemlist('git rev-parse --git-path tags')
+    if v:shell_error == 0 && len(path) > 0
+      b:git_tags = fnamemodify(path[0], ':p')
+      &l:tags = escape(b:git_tags, ' ,')
+    endif
+  enddef
+
+  autocmd BufEnter * GitTags()
+
   autocmd VimEnter * g:LspAddServer(lspServers)
   autocmd VimEnter * g:VimCompleteOptionsSet(vimcompleteOptions)
 augroup END
