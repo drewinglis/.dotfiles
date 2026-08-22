@@ -30,7 +30,7 @@ if ! shopt -oq posix; then
 fi
 
 function add_to_path_if_exists () {
-  [[ -s $1 ]] && PATH="${PATH}:${1}"
+  [[ -d $1 && ":${PATH}:" != *":${1}:"* ]] && PATH="${PATH}:${1}"
 }
 export -f add_to_path_if_exists
 
@@ -45,6 +45,9 @@ add_to_path_if_exists "${GOPATH}/bin"
 add_to_path_if_exists '/usr/local/heroku/bin'
 add_to_path_if_exists '/usr/local/share/npm/bin'
 add_to_path_if_exists "${HOME}/local.conf.d/bin"
+
+# Installed by uv; prepends ~/.local/bin, guarding against duplicates itself.
+[[ -f "${HOME}/.local/bin/env" ]] && source "${HOME}/.local/bin/env"
 
 [[ -f '/opt/homebrew/bin/brew' ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 

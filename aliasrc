@@ -42,13 +42,15 @@ if ! type -t __git_complete >/dev/null; then
     NEW_HOMEBREW_PATH=/opt/homebrew/etc/bash_completion.d/git-completion.bash
     [[ -f "${NEW_HOMEBREW_PATH}" ]] && source "${NEW_HOMEBREW_PATH}"
   else
-    source /usr/share/bash-completion/completions/git
+    GIT_COMPLETION_PATH=/usr/share/bash-completion/completions/git
+    [[ -f "${GIT_COMPLETION_PATH}" ]] && source "${GIT_COMPLETION_PATH}"
   fi
 fi
 
 function git_alias () {
   alias "$1"
-  __git_complete $(echo ${1} | cut -d '=' -f 1) _git_$(echo ${1} | cut -d ' ' -f 2)
+  local subcommand=${1#* }
+  __git_complete "${1%%=*}" "_git_${subcommand%% *}"
 }
 git_alias gbd='git branch -d'
 # Pretend this is short for "git branch rebase -d".
@@ -83,7 +85,7 @@ alias lh='ls -lh'
 alias ll='ls -l'
 alias lah='ls -lah'
 
-alias md5sum='md5 -r'
+is_darwin && alias md5sum='md5 -r'
 alias octave='octave -qf'
 alias _open-pr='open $(git push-url $(git upstream | cut -d "/" -f1) | sed -e "s,git@\\(.*\\):,https://\1/," | sed "s/.git$//")/compare/$(git current-branch)?expand=1'
 alias open-pr='_open-pr 2>/dev/null || (git branch -u origin/main && _open-pr)'
