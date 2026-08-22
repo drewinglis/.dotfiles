@@ -1,65 +1,49 @@
 #!/bin/bash
+#
+# Prints the tmux window name for a pane: "repo:branch" inside a git
+# repository (including worktrees, where the name is the main repo's), and
+# the pane's command otherwise.
 
 readonly TARGET_PWD="${1}"
+readonly PANE_COMMAND="${2}"
 readonly GIT_BRANCH_MAX_LENGTH=50
 readonly WINDOW_NAME_MAX_LENGTH=100
 
 # Use local override if applicable.
 readonly LOCAL_OVERRIDE_SCRIPT="$HOME/local.conf.d/bin/tmux-window-name"
-local_override=''
 
-if [[ -f ${LOCAL_OVERRIDE_SCRIPT} ]]; then
-  local_override="$(${LOCAL_OVERRIDE_SCRIPT} ${TARGET_PWD} ${2})"
-fi
-
-if [[ ${local_override} != '' ]]; then
-  echo ${local_override}
-  exit 0
-fi
-
-if [[ ! -d "${TARGET_PWD}" ]]; then
-  echo "${TARGET_PWD}"
-  exit 0
-fi
-
-# Lightly modified from http://aaroncrane.co.uk/2009/03/git_branch_prompt/
-if [[ `uname` == 'Darwin' ]]; then
-  # this needs `brew install coreutils` or similar to work
-  readonly READLINK='greadlink -e'
-else
-  readonly READLINK='readlink -e'
-fi
-
-find_git_repo() {
-  local dir=${1}
-  until [ "${dir}" -ef / ]; do
-    if [ -f "${dir}/.git/HEAD" ]; then
-      echo "`${READLINK} ${dir}`/"
-      return
-    fi
-    dir="${dir}/.."
-  done
-  return
-}
-
-find_git_branch() {
-  head=$(< "${1}.git/HEAD")
-  if [[ ${head} == ref:\ refs/heads/* ]]; then
-    echo "${head#*/*/}" | head -c ${GIT_BRANCH_MAX_LENGTH}
-  elif [[ ${head} != '' ]]; then
-    echo '(detached)'
-  else
-    echo '(unknown)'
+if [[ -x ${LOCAL_OVERRIDE_SCRIPT} ]]; then
+  local_override="$(${LOCAL_OVERRIDE_SCRIPT} "${TARGET_PWD}" "${PANE_COMMAND}")"
+  if [[ -n ${local_override} ]]; then
+    echo "${local_override}"
+    exit 0
   fi
-}
+fi
 
-readonly GIT_DIR=`find_git_repo ${TARGET_PWD}`
-
-if [[ ${GIT_DIR} != '' ]]; then
-  readonly GIT_BRANCH=`find_git_branch ${GIT_DIR}`
-
-  echo "$(basename ${GIT_DIR} | sed -e 's/^[^a-zA-Z0-9]\+//'):${GIT_BRANCH}"
+if [[ ! -d ${TARGET_PWD} ]]; then
+  echo "${TARGET_PWD:0:${WINDOW_NAME_MAX_LENGTH}}"
   exit 0
 fi
 
-echo $2 | head -c ${WINDOW_NAME_MAX_LENGTH}
+# One git call yields both the repository we're in (--git-common-dir points at
+# the main repository even from a worktree) and the branch ("HEAD" when
+# detached).
+if git_info=$(git -C "${TARGET_PWD}" rev-parse --path-format=absolute \
+    --git-common-dir --abbrev-ref HEAD 2>/dev/null); then
+  git_dir="${git_info%$'\n'*}"
+  branch="${git_info##*$'\n'}"
+
+  # Name the repository after the directory containing .git, or after the
+  # directory itself for a bare repository.
+  repo="${git_dir%/.git}"
+  repo="${repo##*/}"
+  # Strip leading punctuation, so ~/.dotfiles shows up as "dotfiles".
+  repo="${repo#"${repo%%[a-zA-Z0-9]*}"}"
+
+  [[ ${branch} == HEAD ]] && branch='(detached)'
+
+  echo "${repo}:${branch:0:${GIT_BRANCH_MAX_LENGTH}}"
+  exit 0
+fi
+
+echo "${PANE_COMMAND:0:${WINDOW_NAME_MAX_LENGTH}}"
