@@ -1,0 +1,11 @@
+[Unit]
+Description=Hyprland session
+Documentation=man:systemd.special(7)
+# graphical-session.target sets RefuseManualStart=yes, so it can only be pulled
+# in by a dependency. BindsTo activates it from here, which in turn starts every
+# unit that is WantedBy=graphical-session.target (waybar, mako, hyprpaper,
+# hypridle, hyprpolkitagent). This mirrors the sway-session.target that Debian
+# ships for sway but not for Hyprland.
+BindsTo=graphical-session.target
+Wants=graphical-session-pre.target
+After=graphical-session-pre.target

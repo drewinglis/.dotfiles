@@ -1,0 +1,112 @@
+// Waybar configuration - single ultrawide on HDMI-A-1
+// vim: ft=jsonc
+[
+{
+    "output": "HDMI-A-1",
+    "layer": "top",
+    "position": "top",
+    "spacing": 4,
+    "reload_style_on_change": true,
+
+    "modules-left": [
+        "hyprland/workspaces",
+        "hyprland/submap"
+    ],
+
+    "modules-center": [
+        "hyprland/window"
+    ],
+
+    "modules-right": [
+        "tray",
+        "idle_inhibitor",
+        "cpu",
+        "memory",
+        "temperature",
+        "wireplumber",
+        "clock",
+        "custom/power"
+    ],
+
+    // Module Configuration
+
+    "clock": {
+        "format": "{:%H:%M %Z, %A %B %d}",
+        "format-alt": "{:%Y-%m-%d}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>"
+    },
+
+    "cpu": {
+        "format": "{usage}% ",
+        "tooltip": false
+    },
+
+    "custom/power": {
+        "format": "⏻ ",
+        "tooltip": false,
+        "on-click": "wlogout"
+    },
+
+    "hyprland/submap": {
+        "format": "::{}::"
+    },
+
+    "hyprland/window": {
+        "separate-outputs": true,
+        "icon": true
+    },
+
+    "hyprland/workspaces": {
+        "format": "<sub>{icon}</sub>\n{windows}",
+        "format-window-separator": " ",
+        "window-rewrite-default": "",
+        "window-rewrite": {
+            "title<.*youtube.*>": "",
+            "class<firefox>": "",
+            "class<firefox> title<.*github.*>": "",
+            "class<foot>": ""
+        },
+        "persistent-workspaces": {
+            "HDMI-A-1": [1, 2, 3, 4, 5]
+        }
+    },
+
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+
+    "memory": {
+        "format": "{}% "
+    },
+
+    // thermal-zone/hwmon-path is machine specific. Left on thermal-zone 0;
+    // if the reading looks wrong, run:
+    //   for f in /sys/class/hwmon/hwmon*/name; do echo "$f: $(cat $f)"; done
+    // and set "hwmon-path" to the matching tempN_input.
+    "temperature": {
+        // CPU package sensor. hwmon-path-abs survives hwmonN renumbering across
+        // boots, unlike a bare /sys/class/hwmon/hwmonN path.
+        "hwmon-path-abs": "/sys/devices/platform/coretemp.0/hwmon",
+        "input-filename": "temp1_input",
+        "critical-threshold": 80,
+        "format": "{temperatureC}°C {icon}",
+        "format-icons": ["", "", ""]
+    },
+
+    "tray": {
+        "show-passive-items": true,
+        "spacing": 10
+    },
+
+    "wireplumber": {
+        "format": "{volume}% {icon}",
+        "format-muted": "",
+        "format-icons": ["", "", ""],
+        "on-click": "pavucontrol"
+    }
+}
+]
