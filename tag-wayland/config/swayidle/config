@@ -1,0 +1,17 @@
+# Idle daemon. Started by niri with `swayidle -w`. niri turns monitors back on
+# itself on any input, so no resume commands are needed.
+
+# Screenlock
+timeout 300 'loginctl lock-session'
+
+# Fast off when locked
+timeout 330 'pidof swaylock && niri msg action power-off-monitors'
+
+# Monitor power off
+timeout 600 'niri msg action power-off-monitors'
+
+# Lock before suspend
+before-sleep 'loginctl lock-session'
+
+# Avoid starting multiple swaylock processes
+lock 'pidof swaylock || swaylock -f'

@@ -9,12 +9,11 @@
     "reload_style_on_change": true,
 
     "modules-left": [
-        "hyprland/workspaces",
-        "hyprland/submap"
+        "niri/workspaces"
     ],
 
     "modules-center": [
-        "hyprland/window"
+        "niri/window"
     ],
 
     "modules-right": [
@@ -47,28 +46,13 @@
         "on-click": "wlogout"
     },
 
-    "hyprland/submap": {
-        "format": "::{}::"
-    },
-
-    "hyprland/window": {
+    "niri/window": {
         "separate-outputs": true,
         "icon": true
     },
 
-    "hyprland/workspaces": {
-        "format": "<sub>{icon}</sub>\n{windows}",
-        "format-window-separator": " ",
-        "window-rewrite-default": "",
-        "window-rewrite": {
-            "title<.*youtube.*>": "",
-            "class<firefox>": "",
-            "class<firefox> title<.*github.*>": "",
-            "class<foot>": ""
-        },
-        "persistent-workspaces": {
-            "HDMI-A-1": [1, 2, 3, 4, 5]
-        }
+    "niri/workspaces": {
+        "format": "{value}"
     },
 
     "idle_inhibitor": {

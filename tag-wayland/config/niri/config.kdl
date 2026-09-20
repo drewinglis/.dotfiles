@@ -1,0 +1,229 @@
+// niri configuration - Debian 13 / RTX 3070
+// Translated from the previous hyprland.conf; same binds where the concepts
+// map, niri defaults where they don't (niri has no submaps, groups or
+// scratchpad - tabbed columns and a named "scratch" workspace stand in).
+// See: https://niri-wm.github.io/niri/Configuration:-Introduction
+
+// Dell U4025QW 40" 5K2K ultrawide. "preferred" resolved wrongly under
+// Hyprland, so the mode is pinned explicitly. 140 DPI at scale 1.
+output "HDMI-A-1" {
+    mode "5120x2160@120"
+    scale 1
+    position x=0 y=0
+}
+
+// Set for processes niri spawns (binds, spawn-at-startup). Units started by
+// systemd (waybar, mako) do not see these; put anything they need in
+// ~/.config/environment.d instead.
+environment {
+    // NVIDIA. Driver open module + nvidia-drm modeset=1 (set in
+    // /etc/modprobe.d/nvidia-drm.conf).
+    __GLX_VENDOR_LIBRARY_NAME "nvidia"
+    LIBVA_DRIVER_NAME "nvidia"
+    GBM_BACKEND "nvidia-drm"
+    NVD_BACKEND "direct"
+    ELECTRON_OZONE_PLATFORM_HINT "auto"
+
+    // Toolkit backends
+    QT_QPA_PLATFORM "wayland;xcb"
+    QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
+    QT_AUTO_SCREEN_SCALE_FACTOR "1"
+    _JAVA_AWT_WM_NONREPARENTING "1"
+    CLUTTER_BACKEND "wayland"
+    SDL_VIDEODRIVER "wayland"
+    MOZ_ENABLE_WAYLAND "1"
+    MOZ_DBUS_REMOTE "1"
+}
+
+input {
+    keyboard {
+        xkb {
+            layout "us"
+            options "caps:escape"
+        }
+        numlock
+    }
+
+    focus-follows-mouse
+}
+
+cursor {
+    xcursor-size 24
+}
+
+layout {
+    gaps 0
+    center-focused-column "never"
+
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+    default-column-width { proportion 0.5; }
+
+    focus-ring {
+        off
+    }
+
+    border {
+        width 2
+        active-color "#268bd2"
+        inactive-color "#595959aa"
+    }
+}
+
+// waybar, mako and hyprpolkitagent are systemd user units pulled in by
+// graphical-session.target, which niri.service binds to. Do not also spawn
+// them here.
+spawn-sh-at-startup "swaybg -i ~/Pictures/wallpapers/current.png -m fill"
+spawn-at-startup "swayidle" "-w"
+spawn-sh-at-startup "wl-paste --type text --watch cliphist store"
+spawn-sh-at-startup "wl-paste --type image --watch cliphist store"
+spawn-at-startup "nm-applet" "--indicator"
+
+hotkey-overlay {
+    skip-at-startup
+}
+
+// foot is translucent; without this niri fills the area behind it with the
+// border color, so focus changes visibly tint the terminal.
+window-rule {
+    match app-id="^foot$"
+    draw-border-with-background false
+}
+
+// Stand-in for Hyprland's special workspace. Always exists; Mod+S jumps to
+// it and Mod+Tab jumps back.
+workspace "scratch"
+
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+binds {
+    Mod+Shift+Slash { show-hotkey-overlay; }
+
+    // Escape hatch to quit niri directly (shows a confirmation)
+    Mod+Shift+Z { quit; }
+
+    // Quick-launch Apps
+    Mod+T hotkey-overlay-title="Terminal" { spawn "foot"; }
+    Mod+B hotkey-overlay-title="Browser" { spawn "firefox"; }
+    Mod+F hotkey-overlay-title="Files" { spawn "thunar"; }
+
+    // Launcher
+    Alt+Space hotkey-overlay-title="Launcher" { spawn "fuzzel"; }
+
+    // Clipboard history
+    Mod+V hotkey-overlay-title="Clipboard history" { spawn-sh "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"; }
+
+    // Close active window
+    Mod+C repeat=false { close-window; }
+
+    // Move/resize windows with Mod+LMB / Mod+RMB drag is built in.
+
+    // Overview of all workspaces and windows
+    Mod+O repeat=false { toggle-overview; }
+
+    // Cycle windows in a column (was: switch focus within a group)
+    Mod+Grave { focus-window-down-or-top; }
+    Mod+Shift+Grave { focus-window-up-or-bottom; }
+
+    // Move focus with Mod+arrows
+    Mod+Left { focus-column-left; }
+    Mod+Right { focus-column-right; }
+    Mod+Up { focus-window-up; }
+    Mod+Down { focus-window-down; }
+    Mod+Home { focus-column-first; }
+    Mod+End { focus-column-last; }
+
+    // Move windows with Mod+Shift+arrows (was: Mod+W submap, Shift+arrows)
+    Mod+Shift+Left { move-column-left; }
+    Mod+Shift+Right { move-column-right; }
+    Mod+Shift+Up { move-window-up; }
+    Mod+Shift+Down { move-window-down; }
+
+    // Switch workspaces relative. niri stacks workspaces vertically, so
+    // Up/Down are the natural keys; Left/Right kept for muscle memory.
+    Mod+Ctrl+Left { focus-workspace-up; }
+    Mod+Ctrl+Right { focus-workspace-down; }
+    Mod+Ctrl+Up { focus-workspace-up; }
+    Mod+Ctrl+Down { focus-workspace-down; }
+    Mod+Tab { focus-workspace-previous; }
+    Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp cooldown-ms=150 { focus-workspace-up; }
+
+    // Switch workspaces with Mod+[0-9]
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+
+    // Open the empty workspace. Workspaces are dynamic and the last one is
+    // always empty; an out-of-range index refers to it.
+    Mod+N { focus-workspace 99; }
+
+    // Move active window to a workspace with Mod+Shift+[0-9]
+    Mod+Shift+1 { move-column-to-workspace 1; }
+    Mod+Shift+2 { move-column-to-workspace 2; }
+    Mod+Shift+3 { move-column-to-workspace 3; }
+    Mod+Shift+4 { move-column-to-workspace 4; }
+    Mod+Shift+5 { move-column-to-workspace 5; }
+    Mod+Shift+6 { move-column-to-workspace 6; }
+    Mod+Shift+7 { move-column-to-workspace 7; }
+    Mod+Shift+8 { move-column-to-workspace 8; }
+    Mod+Shift+9 { move-column-to-workspace 9; }
+
+    // Move active window to the empty workspace
+    Mod+Shift+N { move-column-to-workspace 99; }
+
+    // Scratch workspace (was: special workspace "magic")
+    Mod+S { focus-workspace "scratch"; }
+    Mod+Shift+S { move-column-to-workspace "scratch"; }
+
+    // Window sizing (was: Mod+W submap F / Shift+F / P / J and resize submap)
+    Mod+M { maximize-column; }
+    Mod+Shift+M { fullscreen-window; }
+    Mod+Shift+F { toggle-window-floating; }
+    Mod+R { switch-preset-column-width; }
+    Mod+Shift+R { switch-preset-window-height; }
+    Mod+Ctrl+R { reset-window-height; }
+    Mod+Minus { set-column-width "-10%"; }
+    Mod+Equal { set-column-width "+10%"; }
+    Mod+Shift+Minus { set-window-height "-10%"; }
+    Mod+Shift+Equal { set-window-height "+10%"; }
+
+    // Columns (was: group submap). A tabbed column is the closest thing to a
+    // Hyprland group.
+    Mod+W { toggle-column-tabbed-display; }
+    Mod+BracketLeft { consume-or-expel-window-left; }
+    Mod+BracketRight { consume-or-expel-window-right; }
+    Mod+Comma { consume-window-into-column; }
+    Mod+Period { expel-window-from-column; }
+
+    // Media controls
+    XF86AudioMute allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"; }
+    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"; }
+    XF86AudioPlay allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+    XF86AudioStop allow-when-locked=true { spawn-sh "playerctl stop"; }
+    XF86AudioPrev allow-when-locked=true { spawn-sh "playerctl previous"; }
+    XF86AudioNext allow-when-locked=true { spawn-sh "playerctl next"; }
+
+    // Screenshots (saved to screenshot-path and copied to the clipboard)
+    Print { screenshot-screen; }
+    Mod+Print { screenshot-window; }
+    Mod+Shift+Print { screenshot; }
+
+    // Lock screen (swayidle handles the lock event, see swayidle/config)
+    Mod+L allow-when-locked=true { spawn "loginctl" "lock-session"; }
+    XF86ScreenSaver allow-when-locked=true { spawn "loginctl" "lock-session"; }
+    Mod+Shift+P { power-off-monitors; }
+
+    // Escape hatch when an app inhibits shortcuts (remote desktop, KVM)
+    Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+}

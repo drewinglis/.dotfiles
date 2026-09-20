@@ -1,0 +1,15 @@
+# Lock screen config
+ignore-empty-password
+image=~/Pictures/wallpapers/current.png
+scaling=fill
+indicator-caps-lock
+font=FiraCode Nerd Font
+color=231f20
+inside-color=231f20e6
+ring-color=33ccff
+key-hl-color=00ff99
+text-color=d9d8d8
+inside-ver-color=231f20e6
+ring-ver-color=33ccff
+inside-wrong-color=231f20e6
+ring-wrong-color=cc2222
