@@ -27,6 +27,7 @@ claude/session-env/
 claude/sessions/
 claude/settings.json
 claude/shell-snapshots/
+claude/skills/synced/
 claude/stats-cache.json
 claude/tasks/
 claude/telemetry/
