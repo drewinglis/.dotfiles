@@ -8,6 +8,7 @@ claude/.credentials.json
 claude/.last-cleanup
 claude/.last-update-result.json
 claude/backups/
+claude/bridge-spawn/
 claude/cache/
 claude/daemon*
 claude/debug/
