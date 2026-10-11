@@ -24,3 +24,8 @@ Before returning a task as done:
 - [ ] Did any change touch code outside the stated scope? If yes, revert or justify.
 - [ ] Did any test pass without actually verifying behavior? Re-check assertions.
 - [ ] Any partial failure, skipped record, truncated output? Surface it in the summary.
+
+# Workflow
+
+When you need to change code in repos outside the project repo, follow the rules
+in ./working-in-other-repos.md
