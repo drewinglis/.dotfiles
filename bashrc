@@ -55,5 +55,6 @@ fi
 
 [[ -f ~/local.conf.d/bashrc ]] && source ~/local.conf.d/bashrc
 
+[[ -r /usr/share/bash-completion/bash_completion ]] && source /usr/share/bash-completion/bash_completion
 [[ -x '/usr/bin/terraform' ]] && complete -C /usr/bin/terraform terraform
 eval "$(direnv hook bash)"
