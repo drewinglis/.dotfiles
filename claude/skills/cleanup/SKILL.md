@@ -3,7 +3,8 @@ name: cleanup
 description: >-
   After a PR is merged, clean up the local worktree and every branch
   tied to the session (including auto-generated branches the rename
-  hook orphaned), and propose merging worktree-local
+  hook orphaned), plus any worktrees the session created in other
+  repos, and propose merging worktree-local
   .claude/settings.local.json changes back to the parent repo.
 ---
 
@@ -25,11 +26,14 @@ hook orphaned), and reconcile any worktree-local
   being cleaned up and infers everything from the current session. It
   ALSO sweeps up sub-agent worktrees (`.claude/worktrees/agent-*`,
   left behind by Agent-tool runs with `isolation: "worktree"`) — see
-  Step 1.5. Invoked from the parent repo with no arg, it runs in
-  sweep-only mode: no primary target, just the agent worktrees.
-- **With arg** → `<branch-or-worktree>` is either a full branch name
-  (e.g. `drewinglis/focused-raman-2b7522`) or the basename of a
-  worktree directory (e.g. `focused-raman-2b7522`). Use this form when
+  Step 1.5 — and worktrees the session created in **other repos**
+  (see `~/.claude/working-in-other-repos.md` and Step 1.6). Invoked
+  from the parent repo with no arg, it runs in sweep-only mode: no
+  primary target, just the agent and other-repo worktrees.
+- **With arg** → `<branch-or-worktree>` is a full branch name
+  (e.g. `drewinglis/focused-raman-2b7522`), the basename of a
+  worktree directory (e.g. `focused-raman-2b7522`), or an absolute
+  worktree path (works from any repo). Use this form when
   invoking from a parent-repo Claude Desktop session, so your session
   doesn't get orphaned when the worktree folder is deleted.
 
@@ -41,13 +45,15 @@ the working tree has uncommitted changes.
 ### Step 1: Resolve context (read-only)
 
 The CWD must be inside some clone of the target repo (either the
-parent or any of its worktrees). Always derive the parent repo path
-and target worktree from `git worktree list --porcelain`.
+parent or any of its worktrees), unless the arg is an absolute path,
+in which case run every git command in Step 1 with `-C <arg>`
+instead of from CWD. Always derive the parent repo path and target
+worktree from `git worktree list --porcelain`.
 
 #### 1.1 — Parent repo path
 
 ```
-git rev-parse --path-format=absolute --git-common-dir
+git [-C <arg>] rev-parse --path-format=absolute --git-common-dir
 ```
 
 `$PARENT` = `dirname` of that output, as an absolute path. (If the
@@ -64,6 +70,7 @@ records, each with `worktree <path>`, `HEAD <sha>`, and
 Find the worktree where any of these match:
 
 - `branch refs/heads/<arg>` matches exactly, **or**
+- the `worktree <path>` equals `<arg>` (absolute-path form), **or**
 - the basename of the `worktree <path>` matches `<arg>` exactly, **or**
 - `<arg>`, after stripping any leading `drewinglis/`, matches the
   basename of the `worktree <path>` exactly.
@@ -283,6 +290,43 @@ Hold the sweep targets (each with its own `$WT`/`$BR`/`$BRANCHES`/PR
 state) for Steps 4, 6, and 7. In the arg form, this step is skipped
 entirely — the arg names one worktree, agent or otherwise.
 
+#### 1.6 — Other-repo worktree sweep (no-arg form only)
+
+`~/.claude/working-in-other-repos.md` requires a worktree for any
+change in a repo other than the project repo. Those worktrees live
+in a different git repository, so `git worktree list` from `$PARENT`
+never shows them.
+
+**Discover** them from the current session's transcripts — the
+ownership record, as in Step 1.5:
+
+```
+grep -ho '"command":"[^"]*worktree add[^"]*"' \
+  ~/.claude/projects/<encoded-project-dir>/<session-id>.jsonl \
+  ~/.claude/projects/<encoded-project-dir>/<session-id>/subagents/*.jsonl
+```
+
+From each hit, extract the repo (`git -C <repo>`, or the preceding
+`cd <repo>`) and the worktree path (resolve shell variables from
+the same command line; relative paths are relative to the repo).
+Skip hits whose repo is `$PARENT` — Steps 1.2 and 1.5 already cover
+those. If the transcript can't be located, sweep nothing and say so.
+
+**Verify** each candidate before it becomes a target: let
+`$PARENT_X` be the dirname of
+`git -C <repo> rev-parse --path-format=absolute --git-common-dir`,
+and keep the candidate only if its path appears as a `worktree`
+record in `git -C $PARENT_X worktree list --porcelain` and is not
+`$PARENT_X` itself. Candidates already removed are dropped silently.
+
+For each verified target, build the same tuple as the primary, but
+run every command against **that target's own repo**: `$PARENT_X`
+replaces `$PARENT` everywhere in Steps 1.3, 1.4, 3, 6 and 7.
+Step 1.4's source 2 applies only if the worktree's branch at
+creation (visible in the `worktree add -b <name>` hit) is known —
+use that name instead of `drewinglis/<basename>`. A dirty target is
+skipped and reported exactly like a dirty agent worktree.
+
 ### Step 2: Pre-flight safety check (read-only; abort on failure)
 
 Only one check: the worktree must have no uncommitted/unstaged changes.
@@ -292,7 +336,8 @@ git -C $WT status --porcelain
 ```
 
 This abort applies to the **primary target only**; dirty sweep
-targets from Step 1.5 are excluded and reported, never fatal.
+targets from Steps 1.5 and 1.6 are excluded and reported, never
+fatal.
 
 Must produce no output. If any lines come back, abort:
 
@@ -333,7 +378,8 @@ but not parent:
 - **Never propose deletions or modifications** to existing parent
   values. This is a propose-only-additions diff.
 
-Hold the proposed additions for Step 4 and Step 5.
+Hold the proposed additions for Step 4 and Step 5. Repeat this for
+each Step 1.6 target against its own `$PARENT_X`.
 
 ### Step 4: Show plan and gather approval
 
@@ -365,6 +411,13 @@ About to clean up:
     - agent-<id>  branch <br> (+ worktree-agent-<id>)  PR #<n> <state>
     ...
     skipped (dirty): agent-<id> — <m> uncommitted files
+    <or: "none found" — omit the section in the arg form>
+
+  Other-repo worktrees to sweep: <n>
+    - $WT  repo $PARENT_X  branch <br>  PR #<n> <state>
+      settings.local.json additions: <list | no changes>
+    ...
+    skipped (dirty): $WT — <m> uncommitted files
     <or: "none found" — omit the section in the arg form>
 
 Proceed? (y/n)
@@ -404,7 +457,8 @@ If the diff from Step 3 is non-empty:
 ### Step 6: Tear down the worktree(s)
 
 Run 6.1–6.2 for the primary target, then repeat for every approved
-sweep target from Step 1.5. Step 7 likewise loops over each target's
+sweep target from Steps 1.5 and 1.6 (using `$PARENT_X` for 1.6
+targets). Step 7 likewise loops over each target's
 `$BRANCHES` after its worktree is removed. If one sweep target fails
 to tear down, report it and continue with the rest.
 
@@ -486,5 +540,7 @@ Cleanup complete:
   ✓ Settings merged: <applied | declined | no-op>
   ✓ Bazel clean: <ran | failed: <error> | n/a>
   ✓ Sub-agent worktrees swept: <n> — agent-<id1>, agent-<id2>, ...
+    <per-target failures and dirty-skips listed here>
+  ✓ Other-repo worktrees swept: <n> — <path1>, <path2>, ...
     <per-target failures and dirty-skips listed here>
 ```

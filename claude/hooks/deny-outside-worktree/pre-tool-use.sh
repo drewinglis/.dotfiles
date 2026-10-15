@@ -3,9 +3,10 @@
 #
 # Denies the tool call when the target file belongs to the same git repository
 # as the session worktree but lives outside that worktree (e.g. the main
-# checkout or a sibling worktree). Files in unrelated repositories or non-git
-# paths are allowed, as are all files when the session is NOT inside a worktree
-# (main checkout, or a non-git directory).
+# checkout or a sibling worktree), or when it lives in the main checkout of a
+# different repository (see ~/.claude/working-in-other-repos.md). Files in
+# other repositories' worktrees and non-git paths are allowed. When the session
+# is NOT inside a worktree, files in the session's own repository are allowed.
 #
 # Fails open: any unexpected error (missing field, git failure, python
 # failure) allows the tool through rather than blocking editing entirely.
@@ -19,15 +20,6 @@ file=$(printf '%s' "$input" \
 
 # Missing required fields → allow.
 [[ -n "$cwd" && -n "$file" ]] || exit 0
-
-# Not in a git repo → allow.
-top=$(git -C "$cwd" rev-parse --show-toplevel 2>/dev/null) || exit 0
-git_dir=$(git -C "$cwd" rev-parse --absolute-git-dir 2>/dev/null) || exit 0
-common_dir=$(git -C "$cwd" rev-parse --path-format=absolute --git-common-dir \
-  2>/dev/null) || exit 0
-
-# Main checkout (git_dir == common_dir) → no worktree in use → allow.
-[[ "$git_dir" != "$common_dir" ]] || exit 0
 
 # Resolve symlinks + relative paths against $cwd. BSD realpath (macOS)
 # rejects non-existent paths, so we walk up to the first existing
@@ -50,9 +42,8 @@ resolve_path() {
   printf '%s%s' "$head" "$tail"
 }
 
-abs_top=$(resolve_path "$top")
 abs_file=$(resolve_path "$file")
-[[ -n "$abs_top" && -n "$abs_file" ]] || exit 0
+[[ -n "$abs_file" ]] || exit 0
 
 # Inside ~/.claude (harness-managed: plans/, projects/, sessions/, tasks/) → allow.
 # ~/.claude is a symlink into this dotfiles repo, so realpath resolves it to
@@ -70,26 +61,51 @@ if [[ "$abs_file" == *"/.claude" || "$abs_file" == *"/.claude/"* ]]; then
   exit 0
 fi
 
-# Inside the worktree → allow.
-if [[ "$abs_file" == "$abs_top" || "$abs_file" == "$abs_top"/* ]]; then
-  exit 0
-fi
-
-# Outside the worktree. Only block when the file belongs to the SAME git
-# repository as the session (shares its common git dir) — e.g. the main
-# checkout or a sibling worktree. Edits to unrelated repos or non-repo paths
-# are allowed. Walk up to the nearest existing directory so new (not-yet-
-# created) files resolve to a directory git can inspect.
+# Walk up to the nearest existing directory so new (not-yet-created) files
+# resolve to a directory git can inspect.
 file_dir=$abs_file
 while [[ ! -d "$file_dir" && "$file_dir" != "/" ]]; do
   file_dir=$(dirname "$file_dir")
 done
+
+# Not in a git repo → allow.
+file_git_dir=$(git -C "$file_dir" rev-parse --absolute-git-dir 2>/dev/null) \
+  || exit 0
 file_common_dir=$(git -C "$file_dir" rev-parse --path-format=absolute \
   --git-common-dir 2>/dev/null) || exit 0
 
-# Different repository (or not a repo) → allow.
-[[ "$(resolve_path "$file_common_dir")" == "$(resolve_path "$common_dir")" ]] \
+# The session's repository comes from the project dir, not $cwd, so that
+# cd-ing into another repo's checkout doesn't make it look like the session's.
+session_dir=${CLAUDE_PROJECT_DIR:-$cwd}
+common_dir=$(git -C "$session_dir" rev-parse --path-format=absolute \
+  --git-common-dir 2>/dev/null) || common_dir=""
+
+# Different repository: deny only its main checkout (git dir == common dir).
+if [[ -z "$common_dir" ]] || \
+   [[ "$(resolve_path "$file_common_dir")" != "$(resolve_path "$common_dir")" ]]
+then
+  [[ "$file_git_dir" == "$file_common_dir" ]] || exit 0
+  jq -nc \
+    --arg reason "File '$abs_file' is in the main checkout of another repository. Create a worktree for it as described in ~/.claude/working-in-other-repos.md. Blocked by deny-outside-worktree hook." \
+    '{hookSpecificOutput: {hookEventName: "PreToolUse",
+                            permissionDecision: "deny",
+                            permissionDecisionReason: $reason}}'
+  exit 0
+fi
+
+top=$(git -C "$session_dir" rev-parse --show-toplevel 2>/dev/null) || exit 0
+git_dir=$(git -C "$session_dir" rev-parse --absolute-git-dir 2>/dev/null) \
   || exit 0
+
+# Session is in its main checkout (git_dir == common_dir) → no worktree in use
+# → allow.
+[[ "$git_dir" != "$common_dir" ]] || exit 0
+
+# Inside the worktree → allow.
+abs_top=$(resolve_path "$top")
+if [[ "$abs_file" == "$abs_top" || "$abs_file" == "$abs_top"/* ]]; then
+  exit 0
+fi
 
 # Same repository, outside the worktree → deny with a structured reason.
 jq -nc \
