@@ -28,4 +28,4 @@ Before returning a task as done:
 # Workflow
 
 When you need to change code in repos outside the project repo, follow the rules
-in ./working-in-other-repos.md
+in @working-in-other-repos.md
