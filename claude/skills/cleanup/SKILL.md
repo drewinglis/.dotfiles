@@ -97,19 +97,22 @@ agent worktrees). Abort only if Step 1.5 then finds nothing either:
 
 #### 1.3 — Refresh PR state for the branch
 
-Only applicable if the `origin` remote is GitHub. Check first:
+Check the `origin` remote first:
 
 ```
 git -C $WT remote get-url origin
 ```
 
-If this fails (no `origin` remote), or the URL host isn't
-`github.com` (covers `https://github.com/...`,
-`git@github.com:...`, and GitHub Enterprise isn't assumed unless the
-host literally is `github.com`), skip this step entirely and record
-"PR state: n/a — origin is not GitHub" for Step 4.
+If this fails (no `origin` remote), skip this step entirely and
+record "PR state: n/a — no origin remote" for Step 4.
 
-Otherwise, fetch the **current** PR state for `$BR` from GitHub.
+If the URL host is `github.com` (covers `https://github.com/...`
+and `git@github.com:...`; GitHub Enterprise isn't assumed unless the
+host literally is `github.com`), use `gh` as below. For any other
+host, assume Gitea and use `tea` instead (see "Non-GitHub origin"
+below).
+
+Either way, fetch the **current** PR state for `$BR`.
 Cached session metadata (`prState` from `list_sessions`) lags behind
 reality — a PR that merged seconds ago can still appear OPEN. Always
 pull fresh.
@@ -129,6 +132,24 @@ Cases:
 - **Returns empty/null** → record "no PR found" for Step 4.
 - **`gh` errors** (auth, network, etc.) → record
   "PR state: unknown — \<error\>" for Step 4 and continue.
+
+**Non-GitHub origin (Gitea via `tea`):** `tea` infers the repo from
+the CWD's git remotes and needs a configured login for the host.
+It has no head-branch filter, so filter client-side:
+
+```
+( cd $WT && tea pulls list --state all --limit 50 \
+    --fields index,state,url,head,title --output json ) \
+  | jq --arg br "$BR" '[.[] | select(.head == $br)][0]'
+```
+
+Map the result onto the same fields as the `gh` case: `number` =
+`index`, `state` = uppercased `state` (`open`/`closed`/`merged` →
+`OPEN`/`CLOSED`/`MERGED`), `url` as-is, `isDraft` = `title` starts
+with `WIP:` or `[WIP]` (Gitea's draft convention). `mergedAt` isn't
+available — omit it. The same three cases apply (PR object / empty
+→ "no PR found" / error → "unknown — \<error\>"); a missing `tea`
+binary or no login matching the origin host counts as an error.
 
 Never abort on this step. The PR state is informational — the user's
 explicit approval in Step 4 is the safety gate. The refresh ensures
@@ -354,11 +375,11 @@ targets; invite the user to name any sweep targets to exclude
 before confirming.
 
 If the PR state for the primary target or any sweep target is
-anything other than `MERGED` or `n/a` (non-GitHub origin), add an
+anything other than `MERGED` or `n/a` (no origin remote), add an
 explicit warning under the summary block:
 
 > ⚠️  PR is still `<state>`. Cleanup deletes the local worktree and
-> branches — the remote branch and PR on GitHub remain. Continue only
+> branches — the remote branch and PR remain. Continue only
 > if you don't need a local checkout to keep iterating.
 
 Wait for an explicit affirmative. On no/anything-else, abort without
