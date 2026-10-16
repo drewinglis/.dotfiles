@@ -53,6 +53,12 @@ if is_darwin; then
   }
 fi
 
+export GPG_TTY=$(tty)
+# Over SSH, prompt for passphrases here instead of on the remote desktop.
+if [[ -n "$SSH_CONNECTION" ]] && command -v gpg-connect-agent >/dev/null; then
+  gpg-connect-agent updatestartuptty /bye >/dev/null
+fi
+
 [[ -f ~/local.conf.d/bashrc ]] && source ~/local.conf.d/bashrc
 
 [[ -r /usr/share/bash-completion/bash_completion ]] && source /usr/share/bash-completion/bash_completion
