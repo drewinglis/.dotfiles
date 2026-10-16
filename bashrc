@@ -55,9 +55,8 @@ fi
 
 export GPG_TTY=$(tty)
 # Over SSH, prompt for passphrases here instead of on the remote desktop.
-if [[ -n "$SSH_CONNECTION" ]] && command -v gpg-connect-agent >/dev/null; then
-  gpg-connect-agent updatestartuptty /bye >/dev/null
-fi
+# Read by ~/bin/pinentry-auto.
+[[ -n "$SSH_CONNECTION" ]] && export PINENTRY_USER_DATA=tty
 
 [[ -f ~/local.conf.d/bashrc ]] && source ~/local.conf.d/bashrc
 

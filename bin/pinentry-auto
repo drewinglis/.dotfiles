@@ -1,0 +1,6 @@
+#!/bin/sh
+# gpg-agent's pinentry-program: prompt on the terminal when the requesting
+# shell set PINENTRY_USER_DATA=tty (see bashrc), otherwise the system default.
+
+[ "$PINENTRY_USER_DATA" = tty ] && exec pinentry-curses "$@"
+exec pinentry "$@"
