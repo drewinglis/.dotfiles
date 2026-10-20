@@ -102,6 +102,18 @@ agent worktrees). Abort only if Step 1.5 then finds nothing either:
 > and there are no sub-agent worktrees to sweep. Pass
 > `/cleanup <branch-or-worktree-name>` to target a specific worktree.
 
+**Session lock:** Claude Code locks a session's worktree with
+`git worktree lock --reason "claude session <slug> (pid <PID> start <T>)"`,
+which `git worktree list --porcelain` shows as a `locked <reason>`
+line in that worktree's record. If the target's lock reason starts
+with `claude session ` and its `<PID>` is a `claude` process in the
+ancestry of the current shell (walk `ps -o ppid= -p <pid>` up from
+`$$`), the worktree belongs to the live current session: set
+`$KEEP` for this target. A kept target keeps its worktree and `$BR`
+— removing them would pull the checkout out from under the running
+session — but its other orphaned branches (Step 1.4) are still
+deleted. Locks held by other sessions or agents don't set `$KEEP`.
+
 #### 1.3 — Refresh PR state for the branch
 
 Check the `origin` remote first:
@@ -235,7 +247,8 @@ force-delete):
 
 `$BR` always survives these filters (it's checked out by `$WT` itself,
 not another worktree). If filtering somehow leaves the set empty, fall
-back to `{$BR}`. Record, per branch, why it's included (current /
+back to `{$BR}`. If `$KEEP` is set, remove `$BR` from the set last
+(an empty set is fine then). Record, per branch, why it's included (current /
 original-auto / rename-chain / recovered from session history) for
 the Step 4 summary. Hold `$BRANCHES` for Step 4 and Step 7.
 
@@ -388,7 +401,8 @@ Print a single summary block to the user:
 ```
 About to clean up:
 
-  Worktree:  $WT
+  Worktree:  $WT  <"(kept — locked by this session)" if $KEEP>
+  Kept branch: $BR  <only if $KEEP>
   Branches to delete: <n>
     - $BR  (current)
     - drewinglis/<original>  (original auto branch — orphaned by rename)
@@ -460,7 +474,8 @@ Run 6.1–6.2 for the primary target, then repeat for every approved
 sweep target from Steps 1.5 and 1.6 (using `$PARENT_X` for 1.6
 targets). Step 7 likewise loops over each target's
 `$BRANCHES` after its worktree is removed. If one sweep target fails
-to tear down, report it and continue with the rest.
+to tear down, report it and continue with the rest. Skip all of
+Step 6 for a target with `$KEEP` set (Step 1.2).
 
 #### 6.1 — Bazel clean (if applicable)
 
@@ -534,7 +549,7 @@ Print a summary:
 
 ```
 Cleanup complete:
-  ✓ Worktree removed: $WT
+  ✓ Worktree removed: $WT  <or: "Worktree kept (locked by this session): $WT, branch $BR">
   ✓ Branches deleted: <n> — <br1>, <br2>, ...
     <list any that failed to delete, with the error>
   ✓ Settings merged: <applied | declined | no-op>
