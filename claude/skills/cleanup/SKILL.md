@@ -102,17 +102,12 @@ agent worktrees). Abort only if Step 1.5 then finds nothing either:
 > and there are no sub-agent worktrees to sweep. Pass
 > `/cleanup <branch-or-worktree-name>` to target a specific worktree.
 
-**Session lock:** Claude Code locks a session's worktree with
-`git worktree lock --reason "claude session <slug> (pid <PID> start <T>)"`,
-which `git worktree list --porcelain` shows as a `locked <reason>`
-line in that worktree's record. If the target's lock reason starts
-with `claude session ` and its `<PID>` is a `claude` process in the
-ancestry of the current shell (walk `ps -o ppid= -p <pid>` up from
-`$$`), the worktree belongs to the live current session: set
-`$KEEP` for this target. A kept target keeps its worktree and `$BR`
-— removing them would pull the checkout out from under the running
-session — but its other orphaned branches (Step 1.4) are still
-deleted. Locks held by other sessions or agents don't set `$KEEP`.
+**Lock:** If the target is locked — `git worktree list --porcelain`
+shows a `locked` line (with or without a reason) in its record — set
+`$KEEP` for this target. Claude Code locks a session's worktree while
+the session runs, so removing it would pull the checkout out from
+under that session. A kept target keeps its worktree and `$BR`, but
+its other orphaned branches (Step 1.4) are still deleted.
 
 #### 1.3 — Refresh PR state for the branch
 
@@ -401,7 +396,7 @@ Print a single summary block to the user:
 ```
 About to clean up:
 
-  Worktree:  $WT  <"(kept — locked by this session)" if $KEEP>
+  Worktree:  $WT  <"(kept — locked)" if $KEEP>
   Kept branch: $BR  <only if $KEEP>
   Branches to delete: <n>
     - $BR  (current)
@@ -549,7 +544,7 @@ Print a summary:
 
 ```
 Cleanup complete:
-  ✓ Worktree removed: $WT  <or: "Worktree kept (locked by this session): $WT, branch $BR">
+  ✓ Worktree removed: $WT  <or: "Worktree kept (locked): $WT, branch $BR">
   ✓ Branches deleted: <n> — <br1>, <br2>, ...
     <list any that failed to delete, with the error>
   ✓ Settings merged: <applied | declined | no-op>
