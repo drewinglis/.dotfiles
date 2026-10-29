@@ -13,9 +13,12 @@ Create the worktree with exactly this command, so `/cleanup` can find it:
 ```
 git -C <repo> fetch origin
 git -C <repo> worktree add --no-track -b drewinglis/<slug> \
-  <repo>/.claude/worktrees/<slug> origin/HEAD
+  .claude/worktrees/<slug> origin/HEAD
 ```
 
+- The worktree path is relative to the repo, not your shell: `-C` changes into
+  `<repo>` first, so writing `<repo>/.claude/...` would land in
+  `<repo>/<repo>/.claude/...` when `<repo>` is a relative path.
 - `origin/HEAD` is the remote's default branch. If it is missing, run
   `git -C <repo> remote set-head origin --auto` first.
 - `--no-track` keeps the branch from tracking the default branch, so a bare
