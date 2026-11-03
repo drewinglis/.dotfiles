@@ -29,3 +29,6 @@ Before returning a task as done:
 
 When you need to change code in repos outside the project repo, follow the rules
 in @working-in-other-repos.md
+
+When opening a PR, open it as ready for review if the repo is owned by the
+`drewinglis` user, and as a draft if it is owned by anyone else.

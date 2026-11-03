@@ -21,6 +21,6 @@ git -C <repo> worktree add --no-track -b drewinglis/<slug> \
 - `--no-track` keeps the branch from tracking the default branch, so a bare
   `git push` can't target it. Push with `git push -u origin drewinglis/<slug>`.
 
-When the change is done, commit and push from the worktree and open a draft PR
-for it. Leave the worktree in place; `/cleanup` from the original session
+When the change is done, commit and push from the worktree and open a PR for
+it. Leave the worktree in place; `/cleanup` from the original session
 removes it after the PR merges.
