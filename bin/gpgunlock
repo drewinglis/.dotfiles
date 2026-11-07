@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# Unlocks the first secret key by prompting on the terminal, for panes where
+# pinentry-auto would prompt on the desktop. Without a terminal, such as from
+# Claude, it prompts in a tmux popup on the active client.
+
+set -eo pipefail
+
+if [[ ! -t 0 ]]; then
+  if [[ -z "${TMUX}" ]]; then
+    echo 'gpgunlock: needs a terminal or a tmux session' >&2
+    exit 1
+  fi
+  exec tmux display-popup -E -T ' gpg unlock ' -w 76 -h 18 "$0"
+fi
+
+export GPG_TTY="$(tty)" PINENTRY_USER_DATA=tty
+
+key="$(gpg --list-secret-keys --with-colons \
+  | awk -F: '$1 == "fpr" && !key { key = $10 } END { print key }')"
+if [[ -z "${key}" ]]; then
+  echo 'gpgunlock: no secret key found' >&2
+  exit 1
+fi
+
+echo unlock | gpg -q -u "${key}" --clearsign >/dev/null
+echo unlock | gpg -q -e -r "${key}" | gpg -q -d >/dev/null
