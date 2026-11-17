@@ -27,9 +27,10 @@ commands.
 ```
 
 - **No arg** → the worktree containing the CWD is the primary target,
-  and the session's sub-agent worktrees (`.claude/worktrees/agent-*`)
-  and other-repo worktrees (see `~/.claude/working-in-other-repos.md`)
-  are swept too. From the parent repo it runs sweep-only.
+  and the session's sub-agent worktrees (`.claude/worktrees/agent-*`),
+  other worktrees the session created in this repo, and other-repo
+  worktrees (see `~/.claude/working-in-other-repos.md`) are swept too.
+  From the parent repo it runs sweep-only.
 - **With arg** → a branch name (`drewinglis/focused-raman-2b7522`), a
   worktree basename (`focused-raman-2b7522`), or an absolute worktree
   path (works from any repo). Use this from a parent-repo session so
@@ -85,9 +86,18 @@ another worktree, computes an additions-only diff of the worktree's
 targets only; sub-agent settings are never merged), and detects Bazel
 marker files. Sweeps use the session's transcript directory
 (`~/.claude/projects/<encoded-cwd>/$CLAUDE_CODE_SESSION_ID`) as the
-ownership record; dirty or locked sweep targets are skipped and reported.
+ownership record. Same-repo and other-repo candidates come from the
+`git worktree add` commands in the transcripts (`transcript-worktrees.py`)
+and must match a registered worktree, so failed commands drop out;
+same-repo candidates exclude the primary target, the main checkout and
+`agent-*` worktrees. Dirty or locked sweep targets are skipped and
+reported, as is a detached session worktree whose HEAD no
+remote-tracking ref contains. A branch with no PR is labelled with its
+commits not on any remote, or "no commits, never pushed".
 
-`apply.sh` runs `bazel clean --expunge` where applicable, `git
-worktree remove` (never forced) and `prune`, `git branch -D` for each
+`apply.sh` handles sweep targets before the primary one, refuses to
+remove a worktree that still contains another registered worktree, and
+runs `bazel clean --expunge` where applicable, `git worktree remove`
+(never forced) and `prune`, `git branch -D` for each
 planned branch, and the settings merge when asked. Failures are
 reported per target and the rest continues.

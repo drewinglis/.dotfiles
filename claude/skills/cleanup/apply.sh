@@ -8,10 +8,12 @@
 #   --exclude <worktree>  skip a listed target (absolute path or basename);
 #                         repeatable
 #
-# For each target: bazel clean (if the worktree uses Bazel), git worktree
-# remove (never --force), prune, then force-delete its branches. A target
-# whose removal fails is reported and its branches are left alone. Exits
-# non-zero if anything failed.
+# Sweep targets go first, since a session worktree can sit inside the primary
+# one, and a worktree that still contains another is never removed. For each
+# target: bazel clean (if the worktree uses Bazel), git worktree remove (never
+# --force), prune, then force-delete its branches. A target whose removal
+# fails is reported and its branches are left alone. Exits non-zero if
+# anything failed.
 
 set -uo pipefail
 
@@ -53,7 +55,7 @@ merge_settings() {  # $1 parent, $2 additions JSON → "applied" or "failed: ...
   printf '%s\n' "$out" > "$file" && echo applied || echo "failed: could not write $file"
 }
 
-SWEPT_AGENT=(); SWEPT_OTHER=()
+SWEPT_AGENT=(); SWEPT_SESSION=(); SWEPT_OTHER=()
 while IFS= read -r t; do
   kind=$(jq -r .kind <<< "$t"); wt=$(jq -r .wt <<< "$t"); br=$(jq -r .branch <<< "$t")
   parent=$(jq -r .parent <<< "$t"); keep=$(jq -r .keep <<< "$t"); bazel=$(jq -r .bazel <<< "$t")
@@ -64,6 +66,11 @@ while IFS= read -r t; do
   if [[ $keep == true ]]; then
     say "✓ Worktree kept (locked): $wt, branch $br"
   else
+    nested=$(git -C "$parent" worktree list --porcelain | awk -v p="$wt/" 'sub(/^worktree /, "") && index($0, p) == 1' | paste -sd ' ')
+    if [[ -n $nested ]]; then
+      say "✗ Worktree remove skipped: $wt contains other worktree(s) that would be deleted with it: $nested (branches left alone)"
+      FAILED=1; continue
+    fi
     if [[ $bazel == true ]]; then
       if ! command -v bazel >/dev/null; then say "✗ Bazel clean: failed: bazel not on PATH ($label)"
       elif out=$(cd "$wt" && bazel clean --expunge 2>&1); then say "✓ Bazel clean: ran ($label)"
@@ -94,14 +101,16 @@ while IFS= read -r t; do
 
   case $kind in
     agent) SWEPT_AGENT+=("$label") ;;
+    session) SWEPT_SESSION+=("$label") ;;
     other-repo) SWEPT_OTHER+=("$wt") ;;
   esac
-done < <(jq -c '.targets[]' "$PLAN")
+done < <(jq -c '.targets | sort_by(.kind == "primary")[]' "$PLAN")
 
 echo "Cleanup complete:"
 printf '  %s\n' "${REPORT[@]}"
 if jq -e '.arg == ""' "$PLAN" >/dev/null; then
   echo "  ✓ Sub-agent worktrees swept: ${#SWEPT_AGENT[@]}${SWEPT_AGENT[*]:+ — ${SWEPT_AGENT[*]}}"
+  echo "  ✓ Session worktrees swept: ${#SWEPT_SESSION[@]}${SWEPT_SESSION[*]:+ — ${SWEPT_SESSION[*]}}"
   echo "  ✓ Other-repo worktrees swept: ${#SWEPT_OTHER[@]}${SWEPT_OTHER[*]:+ — ${SWEPT_OTHER[*]}}"
 fi
 jq -r '.skipped[] | "  – Skipped: \(.wt) — \(.reason)"' "$PLAN"

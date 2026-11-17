@@ -1,11 +1,14 @@
 """Find `git worktree add` commands in session transcripts.
 
-Usage: transcript-worktrees.py <transcript.jsonl>...
+Usage: transcript-worktrees.py [--cwd <dir>] <transcript.jsonl>...
 
 Prints one "repo<TAB>worktree-path<TAB>branch" line per command found, with
 simple shell variables from the same command line expanded. The repo is the
 `git -C` target, else the preceding `cd` target, else the worktree path
-itself (git resolves its repository from either). Parsing is best-effort:
+itself (git resolves its repository from either). Relative paths with neither
+resolve against --cwd, the session's working directory. When several commands
+name the same worktree, the last one wins, so a retry overrides the failed
+attempt before it. Parsing is best-effort:
 plan.sh verifies every candidate against the actual repo before it becomes
 a target.
 """
@@ -25,7 +28,7 @@ def expand(tok, env):
     return tok
 
 
-def parse(command):
+def parse(command, cwd=None):
     env = {"HOME": os.environ.get("HOME", "")}
     try:
         lexer = shlex.shlex(command, posix=True, punctuation_chars=True)
@@ -33,7 +36,6 @@ def parse(command):
         toks = list(lexer)
     except ValueError:
         return
-    cwd = None
     i = 0
     while i < len(toks):
         t = toks[i]
@@ -79,8 +81,8 @@ def parse(command):
         i += 1
 
 
-def main(files):
-    seen = set()
+def main(files, cwd=None):
+    found = {}
     for f in files:
         try:
             fh = open(f, encoding="utf-8")
@@ -105,13 +107,16 @@ def main(files):
                     cmd = (block.get("input") or {}).get("command", "")
                     if "worktree add" not in cmd:
                         continue
-                    for repo, path, branch in parse(cmd):
-                        key = (repo, path)
-                        if key in seen:
-                            continue
-                        seen.add(key)
-                        print(f"{repo}\t{path}\t{branch}")
+                    for repo, path, branch in parse(cmd, cwd):
+                        found.pop((repo, path), None)
+                        found[(repo, path)] = branch
+    for (repo, path), branch in found.items():
+        print(f"{repo}\t{path}\t{branch}")
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    args = sys.argv[1:]
+    cwd = None
+    if args[:1] == ["--cwd"]:
+        cwd, args = args[1], args[2:]
+    main(args, cwd)

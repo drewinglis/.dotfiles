@@ -8,9 +8,9 @@
 #   <branch-or-worktree>  a branch name, a worktree directory basename, or an
 #                         absolute worktree path. Without it, the worktree
 #                         containing the CWD is the primary target and the
-#                         session's sub-agent and other-repo worktrees are
-#                         swept too. From the parent repo with no arg, only
-#                         the sweeps run.
+#                         session's sub-agent, same-repo and other-repo
+#                         worktrees are swept too. From the parent repo with
+#                         no arg, only the sweeps run.
 #   --also-branch <name>  a branch the caller knows belongs to this session
 #                         (e.g. a rename the recycled reflog lost). It goes
 #                         through the same safety filters as the rest.
@@ -82,7 +82,13 @@ pr_lookup() {
          isDraft: (.title | test("^(WIP:|\\[WIP\\])"))}' 2>&1) \
       || { PR_NOTE="unknown — ${out//$'\n'/ }"; return; }
   fi
-  if [[ -n $out ]]; then PR_JSON=$out; else PR_NOTE="no PR found"; fi
+  [[ -n $out ]] && { PR_JSON=$out; return; }
+  local ahead
+  ahead=$(git -C "$wt" rev-list --count "refs/heads/$br" --not --remotes 2>/dev/null)
+  if [[ $ahead == 0 ]] && ! git -C "$wt" show-ref --quiet "refs/remotes/origin/$br"; then
+    PR_NOTE="no PR found — no commits, never pushed"
+  elif [[ -n $ahead && $ahead != 0 ]]; then PR_NOTE="no PR found — $ahead commit(s) not on any remote"
+  else PR_NOTE="no PR found"; fi
 }
 
 # Prints "name<TAB>reason" for every local branch to delete for one target.
@@ -184,7 +190,9 @@ skip() {  # $1 kind, $2 wt, $3 reason
 
 # Emits one target as a JSON object, or records it as skipped (dirty, or a
 # locked sweep target). A detached-HEAD worktree is removed without deleting
-# any branch, since there is no current branch to trace a rename chain from.
+# any branch, since there is no current branch to trace a rename chain from;
+# a detached session worktree is skipped unless a remote-tracking ref
+# contains its HEAD.
 # $1 kind, $2 wt, $3 branch, $4 parent, $5 locked, $6.. creation candidates.
 build_target() {
   local kind=$1 wt=$2 br=$3 parent=$4 locked=$5; shift 5
@@ -199,6 +207,12 @@ build_target() {
   fi
   if [[ $kind != primary && $locked == 1 ]]; then
     skip "$kind" "$wt" "locked"
+    return
+  fi
+  if [[ $kind == session && -z $br && -z $(git -C "$wt" branch -r --contains HEAD 2>/dev/null) ]]; then
+    local unpushed
+    unpushed=$(git -C "$wt" log --format='%h %s' HEAD --not --remotes 2>/dev/null)
+    skip "$kind" "$wt" "detached HEAD with $(printf '%s\n' "$unpushed" | grep -c .) unpushed commit(s): $(printf '%s\n' "$unpushed" | head -3 | paste -sd ';' | sed 's/;/; /g')"
     return
   fi
   local keep=0; [[ $kind == primary && $locked == 1 ]] && keep=1
@@ -259,7 +273,7 @@ fi
 if [[ -z $ARG ]]; then
   SESSION=${CLAUDE_CODE_SESSION_ID:-}
   if [[ -z $SESSION ]]; then
-    NOTES+=("Sub-agent and other-repo sweeps skipped: CLAUDE_CODE_SESSION_ID is not set.")
+    NOTES+=("Sub-agent, same-repo and other-repo sweeps skipped: CLAUDE_CODE_SESSION_ID is not set.")
   else
     PROJ_DIR=$HOME/.claude/projects/$(printf '%s' "$TOP" | sed 's/[^A-Za-z0-9]/-/g')
     SUBAGENTS=$PROJ_DIR/$SESSION/subagents
@@ -277,30 +291,34 @@ if [[ -z $ARG ]]; then
     fi
 
     if [[ -f $TRANSCRIPT ]]; then
-      if ! PARSED=$(python3 -I "$SCRIPT_DIR/transcript-worktrees.py" "$TRANSCRIPT" "$SUBAGENTS"/*.jsonl 2>&1); then
-        NOTES+=("Other-repo sweep skipped: transcript parser failed — ${PARSED##*$'\n'}")
+      if ! PARSED=$(python3 -I "$SCRIPT_DIR/transcript-worktrees.py" --cwd "$TOP" "$TRANSCRIPT" "$SUBAGENTS"/*.jsonl 2>&1); then
+        NOTES+=("Same-repo and other-repo sweeps skipped: transcript parser failed — ${PARSED##*$'\n'}")
         PARSED=""
       fi
       seen=()
       while IFS=$'\t' read -r repo path b; do
         [[ -n $repo && -n $path ]] || continue
         px=$(repo_parent "$repo") || continue
-        [[ $px != "$PARENT" ]] || continue
+        kind=other-repo
+        if [[ $px == "$PARENT" ]]; then
+          [[ $path != "$WT" && $(basename "$path") != agent-* ]] || continue
+          kind=session
+        fi
         [[ " ${seen[*]:-} " == *" $path "* ]] && continue
         seen+=("$path")
         while IFS=$'\t' read -r rpath rl rb; do
           [[ $rpath == "$path" && $rpath != "$px" ]] || continue
-          build_target other-repo "$rpath" "$rb" "$px" "$rl" ${b:+"$b"}
+          build_target "$kind" "$rpath" "$rb" "$px" "$rl" ${b:+"$b"}
         done < <(worktree_records "$px")
       done <<< "$PARSED"
     else
-      NOTES+=("Other-repo sweep skipped: transcript not found at $TRANSCRIPT.")
+      NOTES+=("Same-repo and other-repo sweeps skipped: transcript not found at $TRANSCRIPT.")
     fi
   fi
 fi
 
 if (( ${#TARGETS[@]} == 0 && ${#SKIPPED[@]} == 0 )); then
-  abort 1 "No worktree specified, the current directory is the parent repo, and there are no sub-agent or other-repo worktrees to sweep. Pass /cleanup <branch-or-worktree-name> to target a specific worktree."
+  abort 1 "No worktree specified, the current directory is the parent repo, and there are no sub-agent, same-repo or other-repo worktrees to sweep. Pass /cleanup <branch-or-worktree-name> to target a specific worktree."
 fi
 
 # --- Write the plan and render it -------------------------------------------
@@ -328,7 +346,7 @@ jq -r --arg plan "$PLAN_FILE" --arg script_dir "$SCRIPT_DIR" '
     "  \(title): \($t | length)",
     ($t[] | "    - \(.wt)  \(branch_label)  (\(.branches | length) branch(es))  PR \(pr_line)",
             (select(kind == "other-repo") | "      repo \(.parent)"),
-            (select(kind == "other-repo") | settings_lines("      settings +"))),
+            (select(kind != "agent") | settings_lines("      settings +"))),
     ($s[] | "    skipped: \(.wt) — \(.reason)");
   ([.targets[] | select(.kind == "primary")][0]) as $p |
   "About to clean up:", "",
@@ -342,7 +360,8 @@ jq -r --arg plan "$PLAN_FILE" --arg script_dir "$SCRIPT_DIR" '
     ($p | settings_lines("    ")),
     "", "  Bazel clean: \(if $p.bazel then "yes — bazel clean --expunge will run in the worktree" else "n/a" end)"
    else "  Primary target: none (invoked from the parent repo — sweep only)" end),
-  (if .arg == "" then "", sweep("agent"; "Sub-agent worktrees to sweep"), "", sweep("other-repo"; "Other-repo worktrees to sweep") else empty end),
+  (if .arg == "" then "", sweep("agent"; "Sub-agent worktrees to sweep"), "",
+    sweep("session"; "Session worktrees in this repo"), "", sweep("other-repo"; "Other-repo worktrees to sweep") else empty end),
   (.notes[] | "", "  Note: \(.)"),
   ([.targets[] | select(((.pr_note | startswith("n/a")) | not) and (.pr.state // "") != "MERGED")] | if length > 0 then
     "", "⚠️  PR is not MERGED for: \(map(.wt | split("/") | last) | join(", ")). Cleanup deletes the local worktree and branches — the remote branch and PR remain. Continue only if you do not need a local checkout to keep iterating."
