@@ -212,7 +212,7 @@ build_target() {
   if [[ $kind == session && -z $br && -z $(git -C "$wt" branch -r --contains HEAD 2>/dev/null) ]]; then
     local unpushed
     unpushed=$(git -C "$wt" log --format='%h %s' HEAD --not --remotes 2>/dev/null)
-    skip "$kind" "$wt" "detached HEAD with $(printf '%s\n' "$unpushed" | grep -c .) unpushed commit(s): $(printf '%s\n' "$unpushed" | head -3 | paste -sd ';' | sed 's/;/; /g')"
+    skip "$kind" "$wt" "detached HEAD with $(printf '%s\n' "$unpushed" | grep -c .) unpushed commit(s): $(printf '%s\n' "$unpushed" | head -3 | paste -sd ';' - | sed 's/;/; /g')"
     return
   fi
   local keep=0; [[ $kind == primary && $locked == 1 ]] && keep=1

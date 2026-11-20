@@ -66,7 +66,7 @@ while IFS= read -r t; do
   if [[ $keep == true ]]; then
     say "✓ Worktree kept (locked): $wt, branch $br"
   else
-    nested=$(git -C "$parent" worktree list --porcelain | awk -v p="$wt/" 'sub(/^worktree /, "") && index($0, p) == 1' | paste -sd ' ')
+    nested=$(git -C "$parent" worktree list --porcelain | awk -v p="$wt/" 'sub(/^worktree /, "") && index($0, p) == 1' | paste -sd ' ' -)
     if [[ -n $nested ]]; then
       say "✗ Worktree remove skipped: $wt contains other worktree(s) that would be deleted with it: $nested (branches left alone)"
       FAILED=1; continue
