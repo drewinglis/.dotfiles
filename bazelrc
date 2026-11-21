@@ -1,4 +1,4 @@
-startup --max_idle_secs=3600
+startup --max_idle_secs=1800
 
 test --test_output=errors
 
