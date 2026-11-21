@@ -92,8 +92,9 @@ workloads() {
   fi
   w=$(kubectl get deployments,statefulsets,daemonsets -n "$ns" -o json) || return 1
   p=$(kubectl get pods -n "$ns" -o json) || return 1
-  jq -n --argjson w "$w" --argjson p "$p" --arg ns "$ns" '
-    [ ($w.items[] | .status as $s
+  jq -n --slurpfile w <(printf '%s' "$w") --slurpfile p <(printf '%s' "$p") --arg ns "$ns" '
+    $w[0] as $w | $p[0] as $p
+    | [ ($w.items[] | .status as $s
         | (if .kind == "DaemonSet" then $s.desiredNumberScheduled // 0 else .spec.replicas // 1 end) as $want
         | {name: "\(.kind | ascii_downcase)/\($ns)/\(.metadata.name)",
            ok: (if ($s.observedGeneration // -1) < .metadata.generation then false
