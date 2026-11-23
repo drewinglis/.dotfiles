@@ -11,7 +11,7 @@
 11. **Convention beats novelty.** In a codebase with an established pattern, use that pattern even when yours is "better." Two patterns are always worse than either alone.
 12. **Fail visibly, not silently.** A migration that "completed successfully" while skipping 14% of records on constraint violations is a bug, not a success. Surface partial failure, skipped rows, truncated output, retry exhaustion.
 13. **Comment sparingly.** Code should be self-documenting. Only add comments if they significantly improve code clarity. Comments shouldn't document behavior changes; they should only document the behavior of the current system.
-14. **Test a poll's check before looping on it.** Run the check once and read its raw output, then make the loop fail loudly on an error or an empty or unexpected response (no `2>/dev/null`, use `pipefail`), and print the last response on timeout. For CI, use the `wait-for-ci` skill instead of writing a loop; for Flux rollouts, use `wait-for-flux`.
+14. **Test a poll's check before looping on it.** Run the check once and read its raw output, then make the loop fail loudly on an error or an empty or unexpected response (no `2>/dev/null`, use `pipefail`), and print the last response on timeout. For CI, use the `wait-for-ci` skill instead of writing a loop; for Flux rollouts, use `wait-for-flux`; for gonfalon deploys, use `wait-for-gonfalon-deploy`.
 
 ## Verification checklist
 
