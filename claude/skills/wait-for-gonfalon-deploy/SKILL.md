@@ -44,7 +44,7 @@ minutes, so a single matching sample doesn't mean the deploy has finished.
    |---|---|---|
    | `ENVIRONMENT` | required | A name from the table below, or a full `https://…/api/status` URL. |
    | `COMMIT` | required | The commit to wait for. Resolved to a full SHA once, against GitHub. |
-   | `-t` | `14400` | Give up after this many seconds. |
+   | `-t` | `86400` | Give up after this many seconds. |
    | `-i` | `120` | Seconds between polls. |
 
 4. **Tell the user** in a sentence or two which commit and environments are

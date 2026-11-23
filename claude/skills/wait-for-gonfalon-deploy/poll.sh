@@ -2,14 +2,14 @@
 # Poll an environment's gonfalon status endpoint until the backend version it
 # serves is a given launchdarkly/gonfalon commit or a descendant of it.
 # Usage: poll.sh [-t MAX_SECONDS] [-i INTERVAL] ENVIRONMENT|STATUS_URL COMMIT
-# Defaults: 14400s max, 120s between polls.
+# Defaults: 86400s max, 120s between polls.
 # Exit codes: 0 = deployed, 2 = deadline reached with the commit not deployed,
 # 1 = error (bad arguments, unknown commit, commit not on main, or five failed
 # checks in a row).
 set -euo pipefail
 
 repo=launchdarkly/gonfalon
-max=14400 interval=120 samples=5 max_failures=5
+max=86400 interval=120 samples=5 max_failures=5
 usage="usage: poll.sh [-t MAX_SECONDS] [-i INTERVAL] ENVIRONMENT|STATUS_URL COMMIT"
 
 die() { echo "error: $*" >&2; exit 1; }
